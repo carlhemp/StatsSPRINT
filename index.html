@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="utf-8"/>
+    <meta name="Description" content="Stats Collector">
+    <meta name="theme-color" content="lightblue">
+    <meta name="msapplication-TileColor" content="#00aba9">
+
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#ff0000">
+
+    <link rel="stylesheet" href="style.css" >
+    
+    <title>Stats Collector</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body class="homepage" id="projector">
+		<div id="homepage" class="screen">
+			<h1>Our Stats</h1>
+
+
+			<div class="row">
+				<div class="columnL">
+					<img onclick="toggleActive(this);" src="singleStat.png" class="clicky">
+				</div>
+				<div class="columnR">
+					<div class="activeHide">
+						<h4>Add a single stat</h4>
+					</div>
+					<div class="activeShow">
+						<h4>Choose 1:</h4>
+						<input name="EV" type="checkbox">
+						<label for="EV">EV</label><br><br>
+
+						<input name="HS" type="checkbox">
+						<label for="HS">HS</label><br><br>
+
+						<input name="SP" type="checkbox">
+						<label for="SP">SP</label><br><br>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="columnL">
+					<img onclick="toggleActive(this);" src="groupStat.png" class="clicky">
+				</div>
+				<div class="columnR">
+					<div class="activeHide">
+						<h4>Add a group stat</h4>
+					</div>
+					<div class="activeShow">
+						<h4>Choose 1:</h4>
+						<input name="EV" type="number" size="3">
+						<label for="EV">EV</label><br><br>
+
+						<input name="HS" type="number" size="3">
+						<label for="HS">HS</label><br><br>
+
+						<input name="SP" type="number" size="3">
+						<label for="SP">SP</label><br><br>
+					</div>
+				</div>
+			</div>
+
+			<select name="movement" id="movement" disabled="true">
+			  <option value="" selected disabled hidden>Select Movement</option>
+				<option value="buffalo">Buffalo State</option>
+				<option value="buffalo">University at Buffalo</option>
+				<option value="buffalo">Niagara University</option>
+				<option value="buffalo">Daemen College</option>
+				<option value="buffalo">SUNY Erie County</option>
+			</select>
+
+			<div id="addLocation" class="activeShow">
+				<button>Add Location to my list</button>
+			</div>
+
+			<button id="submit" class="activeShow" onclick="location.hash='submit'">Submit</button>
+
+		</div>
+		<div id="summary" class="screen">
+			<div>
+				<h1>Our Stats</h1>
+
+				<br><br><br><br>
+				<img src="greatWork.png" width="100%">
+				<br><br><br><br>
+				<h2>1 HS conversation has been added to your movement!</h2>
+				<br><br><br>
+				<h2>3 more days until your team gets a new stats score sheet! Check back then :) </h2><br><br><br>
+
+				<div id="lastScore">
+					<button>Last Score sheet(infobase)</button>
+				</div>
+				<br><br><br>
+
+				<div id="back">
+					<button onclick="location.hash='';">back</button>
+				</div>
+				<br><br><br>
+
+			</div>
+		</div>
+		<script>
+			function toggleActive(el){
+				el.closest('.row').classList.toggle('active'); 
+				el.closest('.screen').classList.toggle('active');
+        
+        let movement = document.getElementById('movement');
+				let disabled = movement.disabled;
+				if(disabled == true) {
+					movement.disabled = false;
+				}
+				else {
+					movement.disabled = true;
+				}
+			}
+
+			document.addEventListener("DOMContentLoaded", function(){
+	      window.addEventListener("hashchange", hashchanged, false);
+	      document.getElementById("movement").disabled=true;
+	      hashchanged();
+	    });
+
+			function hashchanged(){
+        var hash = location.hash;
+        console.log(hash);
+
+        if(hash == ''){
+          document.getElementById('projector').classList = 'homepage';
+          window.document.title = "Stats Collectors";
+        }
+        else if(hash.startsWith('#submit')) {
+        	document.getElementById('projector').classList = 'summary';
+        	window.document.title = "Stats Summary";
+        }
+      }          
+    
+		</script>
+	</body>
+</html>
