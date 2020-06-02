@@ -9,7 +9,7 @@
   --main-color: #0069c0;
 }
 body {
-	overflow: none;
+	overflow: hidden;
 }
 .screen {
 	position: fixed;
@@ -58,11 +58,16 @@ body {
 .activeShow {
 	max-height: 0;
 	overflow: hidden;
+	border-width: 0;
 }
 .activeHide,
 .active .active,
-.active .activeShow {
+.active #submit,
+.active .active .activeShow {
 	max-height: 250px;
+}
+.active #submit {
+	border-width: 1px;
 }
 .active .row.active {
 	padding-bottom: 2rem;
