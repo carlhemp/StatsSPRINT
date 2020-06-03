@@ -26,6 +26,9 @@ body {
 .screen > div:nth-last-child(2) {
 	flex-grow: 2;
 }
+.screen > * {
+	flex-shrink: 0;
+}
 .fl {
 	float: left;
 }
