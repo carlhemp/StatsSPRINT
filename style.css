@@ -63,7 +63,7 @@ body {
 .activeHide,
 .active .active,
 .active #submit,
-.active .active .activeShow {
+.active .activeShow {
 	max-height: 250px;
 }
 .active #submit {
