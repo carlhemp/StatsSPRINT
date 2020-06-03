@@ -63,7 +63,8 @@ body {
 .activeHide,
 .active .active,
 .active #submit,
-.active .activeShow {
+.active #addLocation,
+.active .active .activeShow {
 	max-height: 250px;
 }
 .active #submit {
