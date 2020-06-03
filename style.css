@@ -32,6 +32,26 @@ body {
 .fl {
 	float: left;
 }
+.dn {
+	position: absolute;
+	top: -20px;
+}
+.round {
+	display: block;
+	width: 45px;
+	height: 45px;
+	border-radius: 100px;
+	box-shadow: 0 0 4px var(--main-color);
+	text-align: center;
+	vertical-align: middle;
+	line-height: 45px; 
+	margin-left: .5rem; 
+	cursor: pointer;
+}
+input:checked + .round {
+	background-color: var(--main-color);
+	color: white;
+}
 .clicky {
 	cursor: pointer;
 }
@@ -73,7 +93,7 @@ body {
 .active #submit,
 .active #addLocation,
 .active .active .activeShow {
-	max-height: 250px;
+	max-height: 300px;
 }
 .active #submit {
 	border-width: 1px;

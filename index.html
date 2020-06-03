@@ -28,18 +28,18 @@
 				</div>
 				<div class="columnR">
 					<div class="activeHide">
-						<h4>Add a single stat</h4>
+						<h4 onclick="toggleActive(this)" class="clicky">Add a single stat</h4>
 					</div>
 					<div class="activeShow">
-						<h4>Choose 1:</h4>
-						<input name="EV" type="checkbox">
-						<label for="EV">EV</label><br><br>
+						<h4>Choose Stats:</h4>
+						<input id="EV" name="EV" type="checkbox" class="dn">
+						<label for="EV" class="round">EV</label><br><br>
 
-						<input name="HS" type="checkbox">
-						<label for="HS">HS</label><br><br>
+						<input id="HS" name="HS" type="checkbox" class="dn">
+						<label for="HS" class="round">HS</label><br><br>
 
-						<input name="SP" type="checkbox">
-						<label for="SP">SP</label><br><br>
+						<input id="SP" name="SP" type="checkbox" class="dn">
+						<label for="SP" class="round">SP</label><br><br>
 					</div>
 				</div>
 			</div>
@@ -50,7 +50,7 @@
 				</div>
 				<div class="columnR">
 					<div class="activeHide">
-						<h4>Add a group stat</h4>
+						<h4 onclick="toggleActive(this);" class="clicky">Add a group stat</h4>
 					</div>
 					<div class="activeShow">
 						<h4>Choose 1:</h4>
