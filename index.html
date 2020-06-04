@@ -76,10 +76,11 @@
 			</select>
 
 			<div id="addLocation" class="activeShow">
-				<button>Add Location to my list</button>
+				<button onclick="addLocationtoList();">Add Location to my list</button>
 			</div>
-
-			<button id="submit" class="activeShow" onclick="location.hash='submit'">Submit</button>
+      <div id="submit" class="activeShow">
+	      <button onclick="location.hash='submit'">Submit</button>
+	    </div>
 
 		</div>
 		<div id="summary" class="screen">
@@ -138,7 +139,12 @@
         	document.getElementById('projector').classList = 'summary';
         	window.document.title = "Stats Summary";
         }
-      }          
+      }     
+      function addLocationtoList() {
+      	let loca = prompt("What's the location's name?");
+      	let movement = document.getElementById('movement');
+      	movement.insertAdjacentHTML('beforeend', '<option value="" selected>'+ loca + '</option>');
+      }
     
 		</script>
 	</body>
