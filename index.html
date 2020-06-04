@@ -79,7 +79,7 @@
 				<button onclick="addLocationtoList();">Add Location to my list</button>
 			</div>
       <div id="submit" class="activeShow">
-	      <button onclick="location.hash='submit'">Submit</button>
+	      <button onclick="summarize();">Submit</button>
 	    </div>
 
 		</div>
@@ -90,12 +90,10 @@
 				<br><br><br><br>
 				<img src="greatWork.png" width="100%">
 				<br><br><br><br>
-				<h2>1 HS conversation has been added to your movement!</h2>
-				<br><br><br>
-				<h2>3 more days until your team gets a new stats score sheet! Check back then :) </h2><br><br><br>
+				<div id="summaryText"><h2>1 HS conversation has been added to your movement!</h2></div><br><br><br>
 
 				<div id="lastScore">
-					<button>Last Score sheet(infobase)</button>
+					<button onclick="location = 'https://infobase.cru.org';">Last Score sheet(infobase)</button>
 				</div>
 				<br><br><br>
 
@@ -129,7 +127,6 @@
 
 			function hashchanged(){
         var hash = location.hash;
-        console.log(hash);
 
         if(hash == ''){
           document.getElementById('projector').classList = 'homepage';
@@ -144,6 +141,37 @@
       	let loca = prompt("What's the location's name?");
       	let movement = document.getElementById('movement');
       	movement.insertAdjacentHTML('beforeend', '<option value="" selected>'+ loca + '</option>');
+      }
+      function summarize() {
+      	let inputs = document.querySelectorAll('.screen.active .row.active input');
+      	let stats = [];
+      	inputs.forEach(function(input) { 
+      		if(input.type == 'number'){
+      			if(input.value > 0) {
+      				stats.push(input.value + ' ' + input.name);
+      			}
+      			input.value = '';
+      		}
+      		else if(input.type == 'checkbox') {
+      			if(input.checked) {
+      				stats.push('1 ' + input.name);	
+      			}
+      			input.checked = false;
+      		}
+				});
+				let s = ' has';
+				if(stats.length > 1) {
+          s = 's have';
+				}
+				let summary = '<h2>'+stats.join(', ') + ' conversation'+s+' been added to your movement!</h2><br><br><br><h2>3 more days until your team gets a new stats score sheet! Check back then :)</h2>';
+				document.getElementById('summaryText').innerHTML = summary;
+      	location.hash = 'submit';
+      	document.querySelectorAll('.active').forEach(function(active) {
+      		active.classList.remove('active');
+      	});
+
+	      document.getElementById("movement").disabled = true;
+	      document.getElementById("summary").scrollTop = 0;
       }
     
 		</script>
