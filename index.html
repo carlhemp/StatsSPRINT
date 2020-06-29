@@ -107,6 +107,22 @@
 			</div>
 		</div>
 		<script>
+			
+			if ('serviceWorker' in navigator) {
+			  navigator.serviceWorker.register('sw.js', {
+			    scope: './'
+			  })
+			  .then((serviceWorker) => {
+			    console.log('service worker registration successful');
+			  })
+			  .catch((err) => {
+			    console.error('service worker registration failed');
+			    console.error(err);
+			  });
+			} else {
+			  console.log('service worker unavailable');
+			}
+
 			function toggleActive(el){
 				el.closest('.row').classList.toggle('active'); 
 				el.closest('.screen').classList.toggle('active');

@@ -1,4 +1,4 @@
-var cacheName = 'ycanta-cache-1.1';
+var cacheName = 'stats-collector-cache-1.1';
 var prefetchedURLs = [
   /*'jquery-3.4.0.min.js'
   /*'db.js',
