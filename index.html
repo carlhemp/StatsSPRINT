@@ -14,100 +14,93 @@
     <link rel="mask-icon" href="safari-pinned-tab.svg" color="#FFCF07">
 
     <link rel="stylesheet" href="style.css" >
+
+  	<script src="jquery-3.4.0.min.js"></script>
+
     
     <title>Stats Collector</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
-	<body class="homepage" id="projector">
+	<body class="locations" id="projector">
 		<div id="homepage" class="screen">
+			<h1>Welcome! </h1>
+			<p>Welcome message.... Team based on Team? This might be hard to do with version 1 - unless we encode it into the URL  something like: .com/index.html#onboarding="Hi there team!"</p>
+
+		</div>
+
+		<div id="onboarding" class="screen">
+			<h1>Welcome! </h1>
+			<h4>Select the Movements below that you would like to add stats for.  Once this is setup your device will remember your preferences</h4>
+			<div id="movements">
+				<input id="one" name="one" type="checkbox" >
+				<label for="one" >University at Buffalo</label>	<br>
+				<input id="two" name="two" type="checkbox" >
+				<label for="two" >Daemen</label>	<br>
+			</div>
+			<input id="name" name="name" type="text" placeholder="Name">
+			<input id="phone" name="phone" type="tel" placeholder="Phone">
+			<div>
+				<input id="ua" name="ua" type="checkbox" >
+				<label for="ua" >I agree to the <a href="google.com">Cru User Agreement</a></label>
+			</div>
+			<button>Setup Device</button>
+
+		</div>
+
+		<div id="locations" class="screen">
+			<h1>Welcome! - </h1>
+			<p>Amanda, thank you for all you do to help people find Jesus on campus!  We hope that you'll be encouraged as you celebrate what God has done in and through you by sharing about the following key activities.</p>
+
+		<form>
+			<div id="fiftypercent">
+				<div>
+					<input id="startDate" name="startDate" type="date"><br>
+					<label for="startDate">Last Reported Date</label>
+				</div>
+				<div>
+					<input id="endDate" name="endDate" type="date"><br>
+					<label for="endDate">Today's Date</label>
+				</div>
+			</div>
+
+			<h2 id="movementName">University of Central Florida Cru</h2>
+
+		  <div id="statsList">
+				<label for="spiritualConvo">Spiritual Conversations</label>
+				<input id="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric">
+				<label for="personalEvang">Personal Evangelism</label>
+				<input id="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric">
+				<label for="personalEvangDec">Personal Evangelism Descions</label>
+				<input id="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric">
+				<label for="holySpiritPres">Holy Spirit Presentations</label>
+				<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric">
+				<button>Next</button>
+			</div>
+		</form>
+
+
+		</div>
+
+		<div id="summary" class="screen">
 			<h1>Our Stats</h1>
 
+			<br><br><br><br>
+			<img src="greatWork.png" width="100%">
+			<br><br><br><br>
+			<div id="summaryText"><h2>1 HS conversation has been added to your movement!</h2></div><br><br><br>
 
-			<div class="row">
-				<div class="columnL">
-					<img onclick="toggleActive(this);" src="singleStat.png" class="clicky">
-				</div>
-				<div class="columnR">
-					<div class="activeHide">
-						<h4 onclick="toggleActive(this)" class="clicky">Add a single stat</h4>
-					</div>
-					<div class="activeShow">
-						<h4>Choose Stats:</h4>
-						<input id="EV" name="EV" type="checkbox" class="dn">
-						<label for="EV" class="round">EV</label><br><br>
-
-						<input id="HS" name="HS" type="checkbox" class="dn">
-						<label for="HS" class="round">HS</label><br><br>
-
-						<input id="SP" name="SP" type="checkbox" class="dn">
-						<label for="SP" class="round">SP</label><br><br>
-					</div>
-				</div>
+			<div id="lastScore">
+				<button onclick="location = 'https://infobase.cru.org';">Last Score sheet(infobase)</button>
 			</div>
+			<br><br><br>
 
-			<div class="row">
-				<div class="columnL">
-					<img onclick="toggleActive(this);" src="groupStat.png" class="clicky">
-				</div>
-				<div class="columnR">
-					<div class="activeHide">
-						<h4 onclick="toggleActive(this);" class="clicky">Add a group stat</h4>
-					</div>
-					<div class="activeShow">
-						<h4>Choose 1:</h4>
-						<input name="EV" type="number" size="3">
-						<label for="EV">EV</label><br><br>
-
-						<input name="HS" type="number" size="3">
-						<label for="HS">HS</label><br><br>
-
-						<input name="SP" type="number" size="3">
-						<label for="SP">SP</label><br><br>
-					</div>
-				</div>
-			</div>
-
-			<select name="movement" id="movement" disabled="true">
-			  <option value="" selected disabled hidden>Select Movement</option>
-				<option value="buffalo">Buffalo State</option>
-				<option value="buffalo">University at Buffalo</option>
-				<option value="buffalo">Niagara University</option>
-				<option value="buffalo">Daemen College</option>
-				<option value="buffalo">SUNY Erie County</option>
-			</select>
-
-			<div id="addLocation" class="activeShow">
-				<button onclick="addLocationtoList();">Add Location to my list</button>
-			</div>
-      <div id="submit" class="activeShow">
-	      <button onclick="summarize();">Submit</button>
-	    </div>
+			<button onclick="location.hash='';">back</button>
 
 		</div>
-		<div id="summary" class="screen">
-			<div>
-				<h1>Our Stats</h1>
 
-				<br><br><br><br>
-				<img src="greatWork.png" width="100%">
-				<br><br><br><br>
-				<div id="summaryText"><h2>1 HS conversation has been added to your movement!</h2></div><br><br><br>
-
-				<div id="lastScore">
-					<button onclick="location = 'https://infobase.cru.org';">Last Score sheet(infobase)</button>
-				</div>
-				<br><br><br>
-
-				<div id="back">
-					<button onclick="location.hash='';">back</button>
-				</div>
-				<br><br><br>
-
-			</div>
-		</div>
 		<script>
-			
+
 			if ('serviceWorker' in navigator) {
 			  navigator.serviceWorker.register('sw.js', {
 			    scope: './'
@@ -122,6 +115,37 @@
 			} else {
 			  console.log('service worker unavailable');
 			}
+/*
+Visit
+
+Initialize
+   If no localstorage
+	   prompt for initialization
+	      Add Movements from link address, checkboxes.
+	      Enter Name
+	      Enter Phone
+	      Checkbox, I agree to Cru UA
+
+   if storage and movements start paging through movements
+      One movement per page.
+
+All go through intialize
+   URL = index.html - shows what?
+         index.html#onboard&locations=4369,49903,20302,23020
+         index.html#onboard - page for onboarding
+         index.html#locations/4369 - movement pages
+         index.html#summary  - summary view
+         index.html# - back to beginning, which shows what?
+
+    user.name = ""
+    user.phone = ""
+    user.locations = [,,,,]
+
+*/
+			$(function() { 
+
+			});
+
 
 			function toggleActive(el){
 				el.closest('.row').classList.toggle('active'); 
@@ -137,7 +161,25 @@
 				}
 			}
 
+			function getUser(){
+				return JSON.parse(localstorage.getItem('user'));
+			}
+			function setUser(user){
+				localstorage.setItem('user', JSON.stringify(user));
+				return;
+			}
+
 			document.addEventListener("DOMContentLoaded", function(){
+				var user = getUser();
+
+				if(user){
+
+				}
+				else{
+					//redirect to intilizations
+
+				}
+
 	      window.addEventListener("hashchange", hashchanged, false);
 	      document.getElementById("movement").disabled=true;
 	      hashchanged();
