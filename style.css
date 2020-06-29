@@ -6,7 +6,10 @@
 "Droid Sans", "Helvetica Neue", sans-serif;*/
 }
 :root {
-  --main-color: #0069c0;
+  --cru-yellow: #FFCF07;
+  --dark-gray: #383F43;
+  --medium-gray: #9C9FA1;
+  --light-gray: #EBECEC;
 }
 body {
 	overflow: hidden;
@@ -81,7 +84,7 @@ button {
 	width: 45px;
 	height: 45px;
 	border-radius: 100px;
-	box-shadow: 0 0 4px var(--main-color);
+	box-shadow: 0 0 4px var(--cru-yellow);
 	text-align: center;
 	vertical-align: middle;
 	line-height: 45px; 
@@ -89,7 +92,7 @@ button {
 	cursor: pointer;
 }
 input:checked + .round {
-	background-color: var(--main-color);
+	background-color: var(--cru-yellow);
 	color: white;
 }
 .clicky {
@@ -104,7 +107,7 @@ input:checked + .round {
 	flex: 150px 0 0;
 }
 .active img {
-	filter:  drop-shadow(2px 2px 2px var(--main-color));
+	filter:  drop-shadow(2px 2px 2px var(--cru-yellow));
 }
 .columnR {
 
@@ -149,7 +152,7 @@ input:checked + .round {
 	margin-bottom:2rem;
 }
 h2 {
-	color: var(--main-color);
+	color: var(--cru-yellow);
 }
 button {
 	height: 2rem;
@@ -175,4 +178,7 @@ select:not(:disabled) {
 #summary {
 	padding-left:4rem;
 	padding-right:4rem;
+}
+#movement {
+	margin: 0;
 }
