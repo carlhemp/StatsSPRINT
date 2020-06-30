@@ -17,86 +17,102 @@
 
   	<script src="jquery-3.4.0.min.js"></script>
 
-    
     <title>Stats Collector</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
-	<body class="locations" id="projector">
+	<body id="projector" class="summary" >
+
 		<div id="homepage" class="screen">
 			<h1>Welcome! </h1>
 			<p>Welcome message.... Team based on Team? This might be hard to do with version 1 - unless we encode it into the URL  something like: .com/index.html#onboarding="Hi there team!"</p>
-
 		</div>
 
-		<div id="onboarding" class="screen">
+		<div id="onboarding" class="screen last-el-bottom">
 			<h1>Welcome! </h1>
-			<h4>Select the Movements below that you would like to add stats for.  Once this is setup your device will remember your preferences</h4>
-			<div id="movements">
-				<input id="one" name="one" type="checkbox" >
-				<label for="one" >University at Buffalo</label>	<br>
-				<input id="two" name="two" type="checkbox" >
-				<label for="two" >Daemen</label>	<br>
-			</div>
-			<input id="name" name="name" type="text" placeholder="Name">
-			<input id="phone" name="phone" type="tel" placeholder="Phone">
-			<div>
-				<input id="ua" name="ua" type="checkbox" >
-				<label for="ua" >I agree to the <a href="google.com">Cru User Agreement</a></label>
-			</div>
-			<button>Setup Device</button>
+			<p>Select the movements below that you would like to add stats for.  Once this is setup your device will remember your preferences</p>
+			<form class="last-el-bottom" id="onboarding">
+				<h2>Movements</h2>
 
+				<div id="movements">
+					<input id="one" name="one" type="checkbox" >
+					<label for="one" >University at Buffalo</label>	
+					<input id="two" name="two" type="checkbox" >
+					<label for="two" >Daemen</label>
+				</div>
+				<input id="name" name="name" type="text" required placeholder="Name">
+				<input id="phone" name="phone" type="tel" required placeholder="Phone">
+				<div>
+					<input id="ua" name="ua" required type="checkbox" >
+					<label for="ua" >I agree to the <a href="http://google.com" target="_blank">Cru User Agreement</a></label>
+				</div>
+				<div>
+					<button class="bottom-button">Setup Device</button>
+				</div>
+			</form>
 		</div>
 
-		<div id="locations" class="screen">
+		<div id="locations" class="screen last-el-bottom">
 			<h1>Welcome! - </h1>
 			<p>Amanda, thank you for all you do to help people find Jesus on campus!  We hope that you'll be encouraged as you celebrate what God has done in and through you by sharing about the following key activities.</p>
 
-		<form>
-			<div id="fiftypercent">
-				<div>
-					<input id="startDate" name="startDate" type="date"><br>
-					<label for="startDate">Last Reported Date</label>
+			<form class="last-el-bottom">
+				<div id="fiftypercent">
+					<div>
+						<input id="startDate" name="startDate" type="date"><br>
+						<label for="startDate">Last Reported Date</label>
+					</div>
+					<div>
+						<input id="endDate" name="endDate" type="date"><br>
+						<label for="endDate">Today's Date</label>
+					</div>
+				</div>
+
+				<h2 id="movementName">University of Central Florida Cru</h2>
+
+			  <div id="statsList">
+					<label for="spiritualConvo">Spiritual Conversations</label>
+					<input id="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric">
+					<label for="personalEvang">Personal Evangelism</label>
+					<input id="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric">
+					<label for="personalEvangDec">Personal Evangelism Descions</label>
+					<input id="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric">
+					<label for="holySpiritPres">Holy Spirit Presentations</label>
+					<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric">
 				</div>
 				<div>
-					<input id="endDate" name="endDate" type="date"><br>
-					<label for="endDate">Today's Date</label>
+					<button class="bottom-button">Next</button>
 				</div>
-			</div>
-
-			<h2 id="movementName">University of Central Florida Cru</h2>
-
-		  <div id="statsList">
-				<label for="spiritualConvo">Spiritual Conversations</label>
-				<input id="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric">
-				<label for="personalEvang">Personal Evangelism</label>
-				<input id="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric">
-				<label for="personalEvangDec">Personal Evangelism Descions</label>
-				<input id="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric">
-				<label for="holySpiritPres">Holy Spirit Presentations</label>
-				<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric">
-				<button>Next</button>
-			</div>
-		</form>
-
-
+			</form>
 		</div>
 
-		<div id="summary" class="screen">
-			<h1>Our Stats</h1>
+		<div id="summary" class="screen last-el-bottom">
+			<h1></h1>
 
-			<br><br><br><br>
-			<img src="greatWork.png" width="100%">
-			<br><br><br><br>
-			<div id="summaryText"><h2>1 HS conversation has been added to your movement!</h2></div><br><br><br>
-
-			<div id="lastScore">
-				<button onclick="location = 'https://infobase.cru.org';">Last Score sheet(infobase)</button>
+			<div>
+				<button href="#"><span>&#128197;</span> Set a calendar reminder</button>
 			</div>
-			<br><br><br>
 
-			<button onclick="location.hash='';">back</button>
-
+			<p style="text-align: center;">Thanks for celebrating with us all that God is doing on Campus! Below is just a small snapshot of what God is doing on your campus in the last 3 weeks.</p>
+      
+      <div class="cards">
+	      <div class="card left">
+	      	<img src="gospel.png" width="80px" height="80px">
+	      	<p>Your group shared the Gospel with 10 people!</p>
+	      </div>
+	      <div class="card right">
+	      	<img src="spirit.png" width="80px" height="80px">
+	      	<p>Your group saw 3 people hear a presentation of the Spirit Filled Life!</p>
+	      </div>
+	      <div class="card center">
+	      	<img src="decision.png" width="80px" height="80px">
+	      	<p>Your group saw 2 people indicate a decision to accept Jesus!</p>
+	      </div>
+	    </div>
+      
+      <div>
+				<button class="bottom-button" onclick="location.hash='';">back</button>
+			</div>
 		</div>
 
 		<script>

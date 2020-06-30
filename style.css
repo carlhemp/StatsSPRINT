@@ -1,6 +1,7 @@
 * {
   box-sizing: border-box;
   transition: all .25s; 
+  font-family: sans-serif;
   /*font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
 "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
 "Droid Sans", "Helvetica Neue", sans-serif;*/
@@ -45,12 +46,20 @@ button {
 }
 input,
 select {
-	width: 100%;
   font-weight: bold;
   padding: 4px 9px;
   display: inline-block;
   border: 2px solid var(--medium-gray);
   border-radius: 2px;
+}
+.card {
+	width: 40vw;
+	height: 200px;
+	filter: drop-shadow(0 0.1rem 0.15rem lightgray);
+	background-color: white;
+	padding: .5rem;
+	text-align: center;
+	vertical-align: bottom;
 }
 #fiftypercent {
 	display: flex;
@@ -69,19 +78,45 @@ select {
 	font-size: 0.8rem;
 }
 
-
+#movements {
+	display: grid;
+	grid-template-columns: 20px 1fr;
+	grid-gap: 1rem;
+}
+#onboarding > * {
+	margin-top: 1rem;
+}
 #statsList {
  display: grid;
  grid-template-columns: 1fr 60px;
  grid-gap: 1rem;
 }
-#statsList label {
-	vertical-align: middle;
-	grid-column: 1 / 2;
+.cards {
+	position: relative;
+	margin-bottom: 2rem;
 }
-#statsList input,
-#statsList button {
-	grid-column: 2 / 3;
+.card > img {
+	position: relative;
+	top: -1.5rem;
+}
+.left {
+	position: absolute;
+	left:0;
+}
+.right {
+	position: absolute;
+	right:0;
+}
+.center {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 180px;
+}
+.bottom-button {
+	margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 65%;
 }
 
 button {
@@ -116,16 +151,26 @@ button:hover {
 	bottom: 0;
 	right: 0;
 	left: 0;
+	height: 100%;
 	transform: translate3d(100%,0,0);
 	padding: 0 2rem 0 2rem;
 	overflow-y: auto;
 }
-.screen > div:nth-last-child(2) {
-	flex-grow: 2;
+.last-el-bottom {
+	display: flex;
+	flex-direction: column;
 }
-.screen > * {
+.last-el-bottom > *:last-child {
+	flex-grow: 2;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+.last-el-bottom > * {
 	flex-shrink: 0;
 }
+
+
 .fl {
 	float: left;
 }
@@ -217,10 +262,6 @@ select {
 .locations #locations,
 .summary #summary {
 	transform: translate3d(0,0,0);
-}
-#summary {
-	padding-left:4rem;
-	padding-right:4rem;
 }
 #movement {
 	margin: 0;
