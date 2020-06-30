@@ -52,15 +52,6 @@ select {
   border: 2px solid var(--medium-gray);
   border-radius: 2px;
 }
-.card {
-	width: 40vw;
-	height: 200px;
-	filter: drop-shadow(0 0.1rem 0.15rem lightgray);
-	background-color: white;
-	padding: .5rem;
-	text-align: center;
-	vertical-align: bottom;
-}
 #fiftypercent {
 	display: flex;
 }
@@ -83,7 +74,7 @@ select {
 	grid-template-columns: 20px 1fr;
 	grid-gap: 1rem;
 }
-#onboarding > * {
+#onboard-form > * {
 	margin-top: 1rem;
 }
 #statsList {
@@ -94,10 +85,23 @@ select {
 .cards {
 	position: relative;
 	margin-bottom: 2rem;
+	margin-top: 1rem;
+}
+.card {
+	width: 40vw;
+	height: 180px;
+	filter: drop-shadow(0 0.1rem 0.25rem var(--medium-gray));
+	background-color: white;
+	padding: .5rem;
+	text-align: center;
+	vertical-align: bottom;
 }
 .card > img {
 	position: relative;
 	top: -1.5rem;
+}
+.card > p {
+	margin-top: 0;
 }
 .left {
 	position: absolute;
@@ -110,13 +114,14 @@ select {
 .center {
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 180px;
+	margin-top: 170px;
 }
 .bottom-button {
 	margin-left: auto;
   margin-right: auto;
   display: block;
   width: 65%;
+	margin-bottom: 2rem;
 }
 
 button {
@@ -124,7 +129,6 @@ button {
 	background-color: var(--cru-yellow);
 	border-color: var(--cru-yellow);
 	display: inline-block;
-	margin-bottom: 2rem;
 	font-weight: bold;
 	text-align: center;
 	touch-action: manipulation;

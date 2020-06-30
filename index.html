@@ -7,7 +7,7 @@
     <meta name="msapplication-TileColor" content="#FFCF07">
 
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 		<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -21,23 +21,27 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
-	<body id="projector" class="summary" >
+	<body id="projector">
 
-		<div id="homepage" class="screen">
+		<div id="homepage" class="screen last-el-bottom">
 			<h1>Welcome! </h1>
-			<p>Welcome message.... Team based on Team? This might be hard to do with version 1 - unless we encode it into the URL  something like: .com/index.html#onboarding="Hi there team!"</p>
+			<p>Welcome message.... Team based? This might be hard to do with version 1 - unless we encode it into the URL  something like: index.html#onboarding="Hi there team!"</p>
+
+			<div>
+				<button class="bottom-button" onclick="location.hash = 'locations';">Add Stats</button>
+			</div>
 		</div>
 
 		<div id="onboarding" class="screen last-el-bottom">
 			<h1>Welcome! </h1>
 			<p>Select the movements below that you would like to add stats for.  Once this is setup your device will remember your preferences</p>
-			<form class="last-el-bottom" id="onboarding">
+			<form class="last-el-bottom" id="onboard-form">
 				<h2>Movements</h2>
 
 				<div id="movements">
-					<input id="one" name="one" type="checkbox" >
+					<input id="one" name="888232" type="checkbox" >
 					<label for="one" >University at Buffalo</label>	
-					<input id="two" name="two" type="checkbox" >
+					<input id="two" name="923929" type="checkbox" >
 					<label for="two" >Daemen</label>
 				</div>
 				<input id="name" name="name" type="text" required placeholder="Name">
@@ -53,10 +57,10 @@
 		</div>
 
 		<div id="locations" class="screen last-el-bottom">
-			<h1>Welcome! - </h1>
-			<p>Amanda, thank you for all you do to help people find Jesus on campus!  We hope that you'll be encouraged as you celebrate what God has done in and through you by sharing about the following key activities.</p>
+			<h1>Welcome, <span class="put_name">- </span>!</h1>
+			<p>Thank you for all you do to help people find Jesus on campus!  We hope that you'll be encouraged as you celebrate what God has done in and through you by sharing about the following key activities.</p>
 
-			<form class="last-el-bottom">
+			<form class="last-el-bottom" id="location-form">
 				<div id="fiftypercent">
 					<div>
 						<input id="startDate" name="startDate" type="date"><br>
@@ -69,6 +73,7 @@
 				</div>
 
 				<h2 id="movementName">University of Central Florida Cru</h2>
+				<input type="hidden" id="movementId" name="movementId">
 
 			  <div id="statsList">
 					<label for="spiritualConvo">Spiritual Conversations</label>
@@ -81,7 +86,7 @@
 					<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric">
 				</div>
 				<div>
-					<button class="bottom-button">Next</button>
+					<button id="movementSubmit" class="bottom-button">Next</button>
 				</div>
 			</form>
 		</div>
@@ -116,7 +121,7 @@
 		</div>
 
 		<script>
-
+			//SERVICE WORKER
 			if ('serviceWorker' in navigator) {
 			  navigator.serviceWorker.register('sw.js', {
 			    scope: './'
@@ -131,93 +136,142 @@
 			} else {
 			  console.log('service worker unavailable');
 			}
-/*
-Visit
-
-Initialize
-   If no localstorage
-	   prompt for initialization
-	      Add Movements from link address, checkboxes.
-	      Enter Name
-	      Enter Phone
-	      Checkbox, I agree to Cru UA
-
-   if storage and movements start paging through movements
-      One movement per page.
-
-All go through intialize
-   URL = index.html - shows what?
-         index.html#onboard&locations=4369,49903,20302,23020
-         index.html#onboard - page for onboarding
-         index.html#locations/4369 - movement pages
-         index.html#summary  - summary view
-         index.html# - back to beginning, which shows what?
-
-    user.name = ""
-    user.phone = ""
-    user.locations = [,,,,]
-
-*/
-			$(function() { 
-
-			});
-
-
-			function toggleActive(el){
-				el.closest('.row').classList.toggle('active'); 
-				el.closest('.screen').classList.toggle('active');
-        
-        let movement = document.getElementById('movement');
-				let disabled = movement.disabled;
-				if(disabled == true) {
-					movement.disabled = false;
-				}
-				else {
-					movement.disabled = true;
-				}
-			}
-
+      
+      //HELPER FUNCTIONS FOR USER
 			function getUser(){
-				return JSON.parse(localstorage.getItem('user'));
+				return JSON.parse(localStorage.getItem('user'));
 			}
 			function setUser(user){
-				localstorage.setItem('user', JSON.stringify(user));
+				localStorage.setItem('user', JSON.stringify(user));
 				return;
 			}
 
+      //ADD HASHCHANGE NAV MANAGER
 			document.addEventListener("DOMContentLoaded", function(){
-				var user = getUser();
-
-				if(user){
-
-				}
-				else{
-					//redirect to intilizations
-
-				}
-
 	      window.addEventListener("hashchange", hashchanged, false);
-	      document.getElementById("movement").disabled=true;
 	      hashchanged();
 	    });
 
 			function hashchanged(){
         var hash = location.hash;
+        let projector = document.getElementById('projector');
 
+				//Make sure we've got a user.
+				let local_user = getUser();
+				if(local_user){
+					if(!window.user){
+						window.user = local_user;
+					}
+				}
+				else if(hash != '#onboarding'){
+					location.hash = "#onboarding";
+					return
+				}
+
+				//ALL our Redirects
         if(hash == ''){
-          document.getElementById('projector').classList = 'homepage';
-          window.document.title = "Stats Collectors";
+          projector.classList = 'homepage';
+          window.document.title = "Stats Collector";
         }
-        else if(hash.startsWith('#submit')) {
-        	document.getElementById('projector').classList = 'summary';
+        else if(hash.startsWith('#onboarding')){
+        	projector.classList = 'onboarding';
+        	window.document.title = "Let's get you onboarded!";
+        }
+        else if(hash.startsWith('#locations')){
+        	// #locations - start with current location
+        	let user = window.user;
+        	if(user.locations.length == user.location + 1){
+        		$('#movementSubmit').text('Submit');
+        	}
+        	else{
+        		$('#movementSubmit').text('Next');
+        	}
+
+        	let movement = user.locations[user.location];
+          $('.put_name').text(user.name); 
+
+          $('#movementName').text(movement.name);
+          $('#movementId').val(movement.id); //hidden field
+
+        	// #locations/id_number - look up that id and display it - 2.0 capabilities
+
+        	projector.classList = 'locations';
+        	window.document.title = "Enter Stats for "+movement.name;
+        }
+        else if(hash.startsWith('#summary')) {
+        	projector.classList = 'summary';
         	window.document.title = "Stats Summary";
         }
-      }     
+      }  
+      //PROCESS ONBOARDING FORM
+      function processOnboardForm(e) {
+		    if (e.preventDefault) e.preventDefault();
+
+		    let user = {};
+		    let nameEl = document.getElementById('name');
+		    let phoneEl = document.getElementById('phone');
+		    user.name = nameEl.value;
+		    user.phone = phoneEl.value;
+		    user.locations = [];
+		    user.location = 0;
+
+		    for(const loc of [{name: 'University at Buffalo', id: 8892920},{name: 'Daemen', id: 8892920}]) {
+		    	user.locations.push({name: loc.name, id: loc.id});
+		    }
+		    setUser(user);
+		    window.user = user;
+		    location.hash = "#";
+        
+        //clear form
+		    phoneEl.value = '';
+		    nameEl.value = '';
+		    $('input[type="checkbox"]').prop('checked', false);
+
+		    return false;
+			}
+			var form = document.getElementById('onboard-form');
+			if (form.attachEvent) {
+			    form.attachEvent("submit", processOnboardForm);
+			} else {
+			    form.addEventListener("submit", processOnboardForm);
+			}
+
+      //PROCESS LOCATION FORM
+      function processLocationForm(e) {
+		    if (e.preventDefault) e.preventDefault();
+        let user = window.user;
+		    //save the data from the form for submittal.
+
+		    //advance the location if not the end one, run hashchange again
+		    if(user.locations.length == user.location + 1){
+		    	//we're resetting location to 0
+		    	window.user.location = 0;
+		    	location.hash = "#summary";
+		    }
+		    else {
+		    	window.user.location = user.location + 1;
+			    location.hash = "#locations/"+user.locations[user.location].id;
+		    }
+        
+        //clear form
+		    $('input[type="checkbox"]').prop('checked', false);
+		    $('input[type="number"]').val(0);
+
+			}
+			var form = document.getElementById('location-form');
+			if (form.attachEvent) {
+			    form.attachEvent("submit", processLocationForm);
+			} else {
+			    form.addEventListener("submit", processLocationForm);
+			}
+
+
       function addLocationtoList() {
       	let loca = prompt("What's the location's name?");
       	let movement = document.getElementById('movement');
       	movement.insertAdjacentHTML('beforeend', '<option value="" selected>'+ loca + '</option>');
       }
+
       function summarize() {
       	let inputs = document.querySelectorAll('.screen.active .row.active input');
       	let stats = [];
