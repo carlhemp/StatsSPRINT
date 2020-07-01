@@ -79,19 +79,35 @@
 					<label for="spiritualConvo">Spiritual Conversations
 						<span rel="tooltip" title="How many Spiritual Conversations have you engaged in whether you did or did not present the gospel and bring them to a point of decision. (Each time you engage the same person count it.)">i</span>
 					</label>
-					<input id="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric">
+					<div>
+						<span class="dec button">-</span>
+						<input id="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric" value="0">
+						<span class="inc button">+</span>
+					</div>
 					<label for="personalEvang">Personal Evangelism
 						<span rel="tooltip" title="How many gospel presentations through personal evangelism, where you brought him/her to a point of decision? (Each time you share the gospel with the same person count it) (Includes staff, student, faculty & volunteer evangelism and personal internet evangelism)">i</span>
 					</label>
-					<input id="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric">
+					<div>
+						<span class="dec button">-</span>
+						<input id="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+						<span class="inc button">+</span>
+					</div>
 					<label for="personalEvangDec">Personal Evangelism Descions
 						<span rel="tooltip" title="How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the gospel?">i</span>
 					</label>
-					<input id="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric">
+					<div>
+						<span class="dec button">-</span>
+						<input id="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+						<span class="inc button">+</span>
+					</div>
 					<label for="holySpiritPres">Holy Spirit Presentations
 						<span rel="tooltip" title="How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?">i</span>
 					</label>
-					<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric">
+					<div>
+						<span class="dec button">-</span>
+						<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+						<span class="inc button">+</span>
+					</div>
 				</div>
 				<div>
 					<button id="movementSubmit" class="bottom-button">Next</button>
@@ -311,6 +327,22 @@
 	      document.getElementById("movement").disabled = true;
 	      document.getElementById("summary").scrollTop = 0;
       }
+      //add +/- buttons to input[type="number"]
+      $(".button").on("click", function() {
+			  let $button = $(this);
+			  let oldValue = $button.parent().find("input").val();
+			  if ($button.text() == "+") {
+				  var newVal = parseFloat(oldValue) + 1;
+				} else {
+			   // Don't allow decrementing below zero
+			    if (oldValue > 0) {
+			      var newVal = parseFloat(oldValue) - 1;
+			    } else {
+			      newVal = 0;
+			    }
+			  }
+			  $button.parent().find("input").val(newVal);
+			});
 
       //TOOLTIP CODE
       $( function() {

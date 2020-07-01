@@ -80,8 +80,11 @@ select {
 }
 #statsList {
  display: grid;
- grid-template-columns: 1fr 60px;
+ grid-template-columns: 1fr 100px;
  grid-gap: 1rem;
+}
+#statsList input {
+	width: 2.3rem;
 }
 .cards {
 	position: relative;
@@ -271,8 +274,9 @@ select {
 #movement {
 	margin: 0;
 }
-
+/*+/- Buttons*/
 /*TOOLTIP CSS*/
+#statsList span,
 span[rel="tooltip"] {
   font-size: .8rem;
   line-height: 1.6;
