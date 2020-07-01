@@ -74,6 +74,8 @@
 
 				<h2 id="movementName">University of Central Florida Cru</h2>
 				<input type="hidden" id="movementId" name="movementId">
+				<input type="hidden" id="userName" name="userName">
+				<input type="hidden" id="userPhone" name="userPhone">
 
 			  <div id="statsList">
 			  	<div>
@@ -82,7 +84,7 @@
 					</div>
 					<div>
 						<span class="dec button">-</span>
-						<input id="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric" value="0">
+						<input id="spiritualConvo" name="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric" value="0">
 						<span class="inc button">+</span>
 					</div>
 					<div>
@@ -91,7 +93,7 @@
 					</div>
 					<div>
 						<span class="dec button">-</span>
-						<input id="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+						<input id="personalEvang" name="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
 						<span class="inc button">+</span>
 					</div>
 					<div>
@@ -100,7 +102,7 @@
 					</div>
 					<div>
 						<span class="dec button">-</span>
-						<input id="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+						<input id="personalEvangDec" name="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
 						<span class="inc button">+</span>
 					</div>
 					<div>
@@ -109,7 +111,7 @@
 					</div>
 					<div>
 						<span class="dec button">-</span>
-						<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+						<input id="holySpiritPres" name="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
 						<span class="inc button">+</span>
 					</div>
 				</div>
@@ -174,8 +176,16 @@
 				return;
 			}
 
-      //ADD HASHCHANGE NAV MANAGER
+      //ADD HASHCHANGE NAV MANAGER and other things
 			document.addEventListener("DOMContentLoaded", function(){
+				var jqxhr = $.ajax({
+			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
+			    method: "GET",
+			    dataType: "json",
+			    data: "movements=true"
+			  }).done(function(data){
+			    console.log(data);
+			  });
 	      window.addEventListener("hashchange", hashchanged, false);
 	      hashchanged();
 	    });
@@ -215,11 +225,12 @@
         		$('#movementSubmit').text('Next');
         	}
 
-        	let movement = user.locations[user.location];
+        	var movement = user.locations[user.location];
           $('.put_name').text(user.name); 
-
           $('#movementName').text(movement.name);
           $('#movementId').val(movement.id); //hidden field
+          $('#userName').val(user.name); //hidden field
+          $('#userPhone').val(user.phone); //hidden field
 
           // set dates for the movement
           let endDate = new Date().toLocaleString().split(',')[0];
@@ -227,7 +238,6 @@
 
           $('#startDate').val(startDate);
           $('#endDate').val(endDate);
-        	
 
         	// #locations/id_number - look up that id and display it - 2.0 capabilities
 
@@ -251,7 +261,7 @@
 		    user.locations = [];
 		    user.location = 0;
 
-		    for(const loc of [{name: 'University at Buffalo', id: 8892920},{name: 'Daemen', id: 8892920}]) {
+		    for(const loc of [{name: 'University at Buffalo', id: 8892920},{name: 'Daemen', id: 8820}]) {
 		    	user.locations.push({name: loc.name, id: loc.id});
 		    }
 		    setUser(user);
@@ -277,6 +287,24 @@
 		    if (e.preventDefault) e.preventDefault();
         let user = window.user;
 		    //save the data from the form for submittal.
+		    var form = $('#location-form'),
+            url  =  "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec"
+
+				var disabled = form.find(':input:disabled').removeAttr('disabled');
+
+				console.log(form.serialize());
+
+				var jqxhr = $.ajax({
+				    url: url,
+				    method: "GET",
+				    dataType: "json",
+				    data: form.serialize()
+				  }).done(function(data){
+				    alert('we did it!')
+				    console.log(data);
+				  });
+        
+        disabled.attr('disabled','disabled');
 
 		    //advance the location if not the end one, run hashchange again
 		    if(user.locations.length == user.location + 1){
