@@ -63,11 +63,11 @@
 			<form class="last-el-bottom" id="location-form">
 				<div id="fiftypercent">
 					<div>
-						<input id="startDate" name="startDate" type="date"><br>
+						<input id="startDate" name="startDate" type="text" disabled><br>
 						<label for="startDate">Last Reported Date</label>
 					</div>
 					<div>
-						<input id="endDate" name="endDate" type="date"><br>
+						<input id="endDate" name="endDate" type="text" disabled><br>
 						<label for="endDate">Today's Date</label>
 					</div>
 				</div>
@@ -76,33 +76,37 @@
 				<input type="hidden" id="movementId" name="movementId">
 
 			  <div id="statsList">
-					<label for="spiritualConvo">Spiritual Conversations
+			  	<div>
+						<label for="spiritualConvo">Spiritual Conversations</label>
 						<span rel="tooltip" title="How many Spiritual Conversations have you engaged in whether you did or did not present the gospel and bring them to a point of decision. (Each time you engage the same person count it.)">i</span>
-					</label>
+					</div>
 					<div>
 						<span class="dec button">-</span>
 						<input id="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric" value="0">
 						<span class="inc button">+</span>
 					</div>
-					<label for="personalEvang">Personal Evangelism
+					<div>
+						<label for="personalEvang">Personal Evangelism</label>
 						<span rel="tooltip" title="How many gospel presentations through personal evangelism, where you brought him/her to a point of decision? (Each time you share the gospel with the same person count it) (Includes staff, student, faculty & volunteer evangelism and personal internet evangelism)">i</span>
-					</label>
+					</div>
 					<div>
 						<span class="dec button">-</span>
 						<input id="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
 						<span class="inc button">+</span>
 					</div>
-					<label for="personalEvangDec">Personal Evangelism Descions
+					<div>
+						<label for="personalEvangDec">Personal Evangelism Decisions</label>
 						<span rel="tooltip" title="How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the gospel?">i</span>
-					</label>
+					</div>
 					<div>
 						<span class="dec button">-</span>
 						<input id="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
 						<span class="inc button">+</span>
 					</div>
-					<label for="holySpiritPres">Holy Spirit Presentations
+					<div>
+						<label for="holySpiritPres">Holy Spirit Presentations</label>
 						<span rel="tooltip" title="How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?">i</span>
-					</label>
+					</div>
 					<div>
 						<span class="dec button">-</span>
 						<input id="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
@@ -216,6 +220,14 @@
 
           $('#movementName').text(movement.name);
           $('#movementId').val(movement.id); //hidden field
+
+          // set dates for the movement
+          let endDate = new Date().toLocaleString().split(',')[0];
+          let startDate = new Date(Date.now() - 14*24*60*60*1000).toLocaleString().split(',')[0];
+
+          $('#startDate').val(startDate);
+          $('#endDate').val(endDate);
+        	
 
         	// #locations/id_number - look up that id and display it - 2.0 capabilities
 

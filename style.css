@@ -67,7 +67,7 @@ select {
 }
 
 #fiftypercent input {
-	font-size: 0.8rem;
+	width: 100%;
 }
 
 #movements {
