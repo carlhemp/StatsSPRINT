@@ -39,10 +39,6 @@
 				<h2>Movements</h2>
 
 				<div id="movements">
-					<input id="one" name="888232" type="checkbox" >
-					<label for="one" >University at Buffalo</label>	
-					<input id="two" name="923929" type="checkbox" >
-					<label for="two" >Daemen</label>
 				</div>
 				<input id="name" name="name" type="text" required placeholder="Name">
 				<input id="phone" name="phone" type="tel" required placeholder="Phone">
@@ -176,21 +172,25 @@
 				return;
 			}
 
-      //ADD HASHCHANGE NAV MANAGER and other things
+      //INITIALIZE HASHCHANGE AND LOAD MOVEMENT LIST INTO MEMORY
 			document.addEventListener("DOMContentLoaded", function(){
-				var jqxhr = $.ajax({
+	      window.addEventListener("hashchange", hashchanged, false);
+	      hashchanged();
+	    });
+
+	    async function loadMovements(){
+				var jqxhr = await $.ajax({
 			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
 			    method: "GET",
 			    dataType: "json",
 			    data: "movements=true"
 			  }).done(function(data){
-			    console.log(data);
+			    window.movementsList = data;
 			  });
-	      window.addEventListener("hashchange", hashchanged, false);
-	      hashchanged();
-	    });
+			  return jqxhr;
+	    }
 
-			function hashchanged(){
+			async function hashchanged(){
         var hash = location.hash;
         let projector = document.getElementById('projector');
 
@@ -201,7 +201,7 @@
 						window.user = local_user;
 					}
 				}
-				else if(hash != '#onboarding'){
+				else if(!hash.startsWith('#onboarding')){
 					location.hash = "#onboarding";
 					return
 				}
@@ -212,12 +212,27 @@
           window.document.title = "Stats Collector";
         }
         else if(hash.startsWith('#onboarding')){
+        	let movements = hash.split('/')[1].split('&');
+
+        	//CHeck if all movements are already added... if so move to homepage or stats addition
+					
+					let movementsList = await loadMovements();
+					console.log('loaded movements');
+					
+					$('#movements').empty();
+        	for(movement of movements) {
+            $('#movements').append('<input id="n'+movement+'" name="'+movement+'" type="checkbox" ><label for="n'+movement+'" >'+window.movementsList[movement]+'</label>');
+        	} 
         	projector.classList = 'onboarding';
         	window.document.title = "Let's get you onboarded!";
         }
         else if(hash.startsWith('#locations')){
         	// #locations - start with current location
         	let user = window.user;
+        	if(user.location == 0) {
+        		window.formSubs = [];
+        	}
+
         	if(user.locations.length == user.location + 1){
         		$('#movementSubmit').text('Submit');
         	}
@@ -261,9 +276,16 @@
 		    user.locations = [];
 		    user.location = 0;
 
-		    for(const loc of [{name: 'University at Buffalo', id: 8892920},{name: 'Daemen', id: 8820}]) {
-		    	user.locations.push({name: loc.name, id: loc.id});
-		    }
+        $('#movements input').each(function(){
+        	if(this.checked) {
+	          user.locations.push({name: $(this).next().text(), id: this.name})
+        	}
+        	else {
+        		console.log('not checked');
+        	}
+        });
+
+		    //overwrites whatever is there... if username and phone are same, let's add new movements? If user exists, let's load the user name and phone to preload...
 		    setUser(user);
 		    window.user = user;
 		    location.hash = "#";
@@ -283,34 +305,34 @@
 			}
 
       //PROCESS LOCATION FORM
-      function processLocationForm(e) {
+      async function processLocationForm(e) {
 		    if (e.preventDefault) e.preventDefault();
         let user = window.user;
-		    //save the data from the form for submittal.
+		    //save the data from the form for submittal later
 		    var form = $('#location-form'),
             url  =  "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec"
 
 				var disabled = form.find(':input:disabled').removeAttr('disabled');
-
-				console.log(form.serialize());
-
-				var jqxhr = $.ajax({
-				    url: url,
-				    method: "GET",
-				    dataType: "json",
-				    data: form.serialize()
-				  }).done(function(data){
-				    alert('we did it!')
-				    console.log(data);
-				  });
-        
+				window.formSubs.push(form.serialize());
         disabled.attr('disabled','disabled');
 
 		    //advance the location if not the end one, run hashchange again
 		    if(user.locations.length == user.location + 1){
 		    	//we're resetting location to 0
 		    	window.user.location = 0;
-		    	location.hash = "#summary";
+		    	//submit everything - can we do this in one go?
+		    	for(movement of window.formSubs){
+		    		var jqxhr = await $.ajax({
+					    url: url,
+					    method: "GET",
+					    dataType: "json",
+					    data: movement
+					  }).done(function(data){
+					    console.log(data);
+					  });
+				    //THen change the location
+			    	location.hash = "#summary";
+		    	}
 		    }
 		    else {
 		    	window.user.location = user.location + 1;
