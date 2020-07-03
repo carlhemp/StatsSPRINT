@@ -146,6 +146,11 @@
 			</div>
 		</div>
 
+		<div id="spin-container">
+			<div id="spinner">
+			</div>
+		</div>
+
 		<script>
 			//SERVICE WORKER
 			if ('serviceWorker' in navigator) {
@@ -318,6 +323,8 @@
 
 		    //advance the location if not the end one, run hashchange again
 		    if(user.locations.length == user.location + 1){
+			    startSpin();
+		    	
 		    	//we're resetting location to 0
 		    	window.user.location = 0;
 		    	//submit everything - can we do this in one go?
@@ -332,6 +339,7 @@
 					  });
 				    //THen change the location
 			    	location.hash = "#summary";
+			    	stopSpin();
 		    	}
 		    }
 		    else {
@@ -350,7 +358,12 @@
 			} else {
 			    form.addEventListener("submit", processLocationForm);
 			}
-
+      function startSpin() {
+        document.getElementById('spin-container').classList = "spin";
+      }
+      function stopSpin() {	
+        document.getElementById('spin-container').classList = "";
+      }
 
       function addLocationtoList() {
       	let loca = prompt("What's the location's name?");

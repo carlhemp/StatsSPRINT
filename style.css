@@ -86,6 +86,46 @@ select {
 #statsList input {
 	width: 2.3rem;
 }
+/*  SPINNER  */
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes change {
+  from { /*Use "to" to change the direction */
+    background-position:bottom right,center;
+  }
+}
+#spin-container {
+	display: none;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top:0;
+	bottom:0;
+	right:0;
+	left:0;
+	margin: 0;
+	padding: 0;
+	background:
+    linear-gradient(to bottom right,rgba(255, 255, 255, 0.3) 33%,white,rgba(255, 255, 255, 0.3) 66%);
+  background-size:300% 300%,cover;
+  animation: change 2s linear infinite;
+}
+#spin-container.spin  {
+	display: flex;
+}
+#spinner {
+	width: 70px;
+	height: 70px;
+	border-top: 5px solid var(--cru-yellow);
+	border-right: 5px solid transparent;
+	border-radius: 50%;
+	animation: spin 2s linear infinite;
+	margin: 0;
+	padding: 0;
+}
 .cards {
 	position: relative;
 	margin-bottom: 2rem;
