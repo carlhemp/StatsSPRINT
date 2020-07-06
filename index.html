@@ -184,6 +184,7 @@
 	    });
 
 	    async function loadMovements(){
+	    	startSpin();
 				var jqxhr = await $.ajax({
 			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
 			    method: "GET",
@@ -192,6 +193,7 @@
 			  }).done(function(data){
 			    window.movementsList = data;
 			  });
+			  stopSpin();
 			  return jqxhr;
 	    }
 
@@ -324,7 +326,7 @@
 		    //advance the location if not the end one, run hashchange again
 		    if(user.locations.length == user.location + 1){
 			    startSpin();
-		    	
+
 		    	//we're resetting location to 0
 		    	window.user.location = 0;
 		    	//submit everything - can we do this in one go?
