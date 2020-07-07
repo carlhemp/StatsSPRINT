@@ -197,6 +197,35 @@
 			  return jqxhr;
 	    }
 
+	    async function registerUser(){
+	    	startSpin();
+				var jqxhr = await $.ajax({
+			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
+			    method: "GET",
+			    dataType: "json",
+			    data: "registerUser=true&userPhone=8253320550&userName=Jimmy%20Mg&userIds=20,390"
+			  }).done(function(data){
+			  	console.log(data);
+			    //window.movementsList = data;
+			  });
+			  stopSpin();
+			  return jqxhr;
+	    }
+	    async function requestUser(){
+	    	startSpin();
+				var jqxhr = await $.ajax({
+			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
+			    method: "GET",
+			    dataType: "json",
+			    data: "requestUser=true&userPhone=8453320550"
+			  }).done(function(data){
+			  	console.log(data);
+			    //window.movementsList = data;
+			  });
+			  stopSpin();
+			  return jqxhr;
+	    }
+
 			async function hashchanged(){
         var hash = location.hash;
         let projector = document.getElementById('projector');

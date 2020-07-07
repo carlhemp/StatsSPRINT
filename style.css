@@ -325,9 +325,14 @@ span[rel="tooltip"] {
   color: var(--medium-gray);
   border-radius: 50%;
   border: 1px solid var(--medium-gray);
-  cursor: help;
   display: inline-block;
   width: 1.4rem;
+}
+span[rel="tooltip"] {
+  cursor: help;
+}
+#statsList span.button {
+	cursor: pointer;
 }
 #tooltip {
   text-align: center;
