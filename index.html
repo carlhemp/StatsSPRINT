@@ -23,31 +23,36 @@
 	</head>
 	<body id="projector">
 
-		<div id="homepage" class="screen last-el-bottom">
-			<h1>Welcome! </h1>
-			<p>Welcome message.... Team based? This might be hard to do with version 1 - unless we encode it into the URL  something like: index.html#onboarding="Hi there team!"</p>
-
-			<div>
-				<button class="bottom-button" onclick="location.hash = 'locations';">Add Stats</button>
-			</div>
-		</div>
-
 		<div id="onboarding" class="screen last-el-bottom">
 			<h1>Welcome! </h1>
-			<p>Select the movements below that you would like to add stats for.  Once this is setup your device will remember your preferences</p>
+			
 			<form class="last-el-bottom" id="onboard-form">
-				<h2>Movements</h2>
+        <div class="movementInfo">
+					<p>Select the movements below that you would like to add stats for OR click <a href="#onboarding">here</a> to login.  </p>
 
-				<div id="movements">
+					<h2>Movements</h2>
+
+					<div id="movements">
+					</div>
+				<br>
+				<br>
+				<small><b>Associate with my account</b></small>
 				</div>
-				<input id="name" name="name" type="text" required placeholder="Name">
-				<input id="phone" name="phone" type="tel" required placeholder="Phone">
+				<div class="loginInfo">
+					<small><b>Login with my phone number</b></small>
+				</div>
+	  		<input id="regUserPhone" name="regUserPhone" type="tel" required placeholder="Phone Number">
+	  		<div class="movementInfo">
+		  		<input name="register" id="register" type="checkbox" onchange="toggleUserName();">
+		  		<label for="register">Register as new user</label>
+					<input id="regUserName" name="regUserName" type="text" placeholder="First and Last Name" style="width: 100%; display: none;">
+				</div>
 				<div>
 					<input id="ua" name="ua" required type="checkbox" >
 					<label for="ua" >I agree to the <a href="http://google.com" target="_blank">Cru User Agreement</a></label>
 				</div>
 				<div>
-					<button class="bottom-button">Setup Device</button>
+					<button id="formSubmit" class="bottom-button"><span style="display:none">Register and </span>Setup Device</button>
 				</div>
 			</form>
 		</div>
@@ -153,6 +158,16 @@
 
 		<script>
 			//SERVICE WORKER
+			function toggleUserName(){
+				$('#regUserName').toggle(); 
+				if($('#register')[0].checked){
+					$('#regUserName').prop('required',true); 
+				}
+				else{
+					$('#regUserName').removeAttr('required'); 
+				}
+				$('#formSubmit span').toggle();
+			}
 			if ('serviceWorker' in navigator) {
 			  navigator.serviceWorker.register('sw.js', {
 			    scope: './'
@@ -241,27 +256,47 @@
 					location.hash = "#onboarding";
 					return
 				}
-
-				//ALL our Redirects
+				
+//IF BLANK WE START HERE>
         if(hash == ''){
-          projector.classList = 'homepage';
-          window.document.title = "Stats Collector";
+        	location.hash = '#locations';
         }
+//ONBOARDING!-----------------------------------------------------------------
         else if(hash.startsWith('#onboarding')){
-        	let movements = hash.split('/')[1].split('&');
+        	$('#movements').empty();
+			    $('input[type="checkbox"]').prop('checked', false);
+			    $('#regUserName').hide();
+			    $('#formSubmit span').hide();
 
-        	//CHeck if all movements are already added... if so move to homepage or stats addition
-					
-					let movementsList = await loadMovements();
-					console.log('loaded movements');
-					
-					$('#movements').empty();
-        	for(movement of movements) {
-            $('#movements').append('<input id="n'+movement+'" name="'+movement+'" type="checkbox" ><label for="n'+movement+'" >'+window.movementsList[movement]+'</label>');
-        	} 
+        	let movements = [];
+        	try {
+            movements = hash.split('/')[1].split('&');
+        	}
+        	catch {
+        		movements = false; 
+        	}
+
+        	//then lets show our movements page
+        	if(movements){
+						let movementsList = await loadMovements();
+						
+	        	for(movement of movements) {
+	            $('#movements').append('<input id="n'+movement+'" name="'+movement+'" type="checkbox" ><label for="n'+movement+'" >'+window.movementsList[movement]+'</label>');
+	        	}
+	        	$('.movementInfo').show();
+	        	$('.loginInfo').hide();
+        	}
+        	//otherwise, lets login or add movements from a dropdown if/when that's added.
+        	else {
+        		$('.movementInfo').hide();
+	        	$('#regUserName').removeAttr('required');
+	        	$('.loginInfo').show();
+        	}
+ 
         	projector.classList = 'onboarding';
         	window.document.title = "Let's get you onboarded!";
         }
+//LOCATIONS!-----------------------------------------------------------------
         else if(hash.startsWith('#locations')){
         	// #locations - start with current location
         	let user = window.user;
@@ -295,6 +330,7 @@
         	projector.classList = 'locations';
         	window.document.title = "Enter Stats for "+movement.name;
         }
+//SUMMARY!-----------------------------------------------------------------
         else if(hash.startsWith('#summary')) {
         	projector.classList = 'summary';
         	window.document.title = "Stats Summary";
@@ -305,23 +341,52 @@
 		    if (e.preventDefault) e.preventDefault();
 
 		    let user = {};
-		    let nameEl = document.getElementById('name');
-		    let phoneEl = document.getElementById('phone');
+		    let nameEl = document.getElementById('regUserName');
+		    let phoneEl = document.getElementById('regUserPhone');
+		    let register = document.getElementById('register').checked;
+
 		    user.name = nameEl.value;
 		    user.phone = phoneEl.value;
 		    user.locations = [];
 		    user.location = 0;
 
-        $('#movements input').each(function(){
-        	if(this.checked) {
-	          user.locations.push({name: $(this).next().text(), id: this.name})
-        	}
-        	else {
-        		console.log('not checked');
-        	}
-        });
 
+        let defaultMovements = false;
 		    //overwrites whatever is there... if username and phone are same, let's add new movements? If user exists, let's load the user name and phone to preload...
+		    try {
+         defaultMovements = location.hash.split('/')[1].split('&').length > 0
+		    }
+		    catch {
+		    	defaultMovements = false;
+		    }
+		    //we are overwriting existing movements or adding a user.
+        if(defaultMovements){
+	        $('#movements input').each(function(){
+	        	if(this.checked) {
+		          user.locations.push({name: $(this).next().text(), id: this.name})
+	        	}
+	        });
+
+	        if(user.locations.length == 0) {
+	        	alert('Select a movement friend!');
+	        	return
+	        }
+
+          //we send in and add a new user
+	        if(register){
+
+	        }
+          //OR we overwrite the existing.
+	        else {
+
+	        }
+        }
+        else {
+          //we load a user's information and movement information.
+        }
+
+        //after all that we set the user and return
+
 		    setUser(user);
 		    window.user = user;
 		    location.hash = "#";
