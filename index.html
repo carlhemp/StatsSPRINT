@@ -39,7 +39,7 @@
 				<small><b>Associate with my account</b></small>
 				</div>
 				<div class="loginInfo">
-					<small><b>If you have previously registered, go ahead and enter your phone number!</b> <br><br> If you haven't yet registered, you'll need open the custom link that was sent to you.</small>
+					<small><b>If you have previously registered, go ahead and enter your phone number!</b> <br><br> If you haven't yet registered, you'll need to open the custom link that was sent to you.</small>
 				</div>
 	  		<input id="regUserPhone" name="regUserPhone" type="tel" required placeholder="Phone Number">
 	  		<div class="movementInfo">
@@ -276,6 +276,11 @@
         }
 //ONBOARDING!-----------------------------------------------------------------
         else if(hash.startsWith('#onboarding')){
+        	if(window.user){
+        		$('#locations').prepend('<div id="notification">You visited an onboarding link! Click <a onclick="delete window.user; localStorage.removeItem(\'user\'); $(\'#notification\').remove();" href="'+hash+'">here</a> to set up!</div>');
+        		location.hash = "#locations";
+        		return
+        	}
         	$('#movements').empty();
 			    $('input[type="checkbox"]').prop('checked', false);
 			    $('#regUserName').hide();
@@ -288,9 +293,9 @@
         	catch {
         		movements = false; 
         	}
-					await loadMovements();
         	//then lets show our movements page
         	if(movements){
+						await loadMovements();
 	        	for(movement of movements) {
 	            $('#movements').append('<input id="n'+movement+'" name="'+movement+'" type="checkbox" ><label for="n'+movement+'" >'+window.movementsList[movement]+'</label>');
 	        	}
@@ -405,6 +410,7 @@
         }
         //attempt to load information from db
         else {
+					await loadMovements();
         	let result = await requestUser(user.phone);
         	if(result.result == "success"){
         		user.name = result.user.userName;
@@ -480,6 +486,9 @@
         //clear form
 		    $('input[type="checkbox"]').prop('checked', false);
 		    $('input[type="number"]').val(0);
+
+		    //clear notification
+		    $('#notification').remove();
 
 			}
 			var form = document.getElementById('location-form');
