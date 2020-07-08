@@ -53,11 +53,20 @@ select {
   border: 2px solid var(--medium-gray);
   border-radius: 2px;
 }
+.transition {
+	transform: translate3d(120%,0,0);
+}
+#location-form{
+	overflow-x: hidden;
+}
 #fiftypercent {
 	display: flex;
 }
 #fiftypercent div {
 	flex: 1 1 20px;
+	background-color: var(--light-gray);
+	padding:0.5rem;
+	border-radius: 2px;
 }
 #fiftypercent div:last-child{
 	margin: 0 0 0 .5rem;

@@ -64,56 +64,58 @@
 			<form class="last-el-bottom" id="location-form">
 				<div id="fiftypercent">
 					<div>
-						<input id="startDate" name="startDate" type="text" disabled><br>
-						<label for="startDate">Last Reported Date</label>
+						<input id="startDate" name="startDate" type="hidden" >
+						<span>From: <b class="startDate"></b></span>
 					</div>
 					<div>
-						<input id="endDate" name="endDate" type="text" disabled><br>
-						<label for="endDate">Today's Date</label>
+						<input id="endDate" name="endDate" type="hidden">
+						<span>To: <b class="endDate"></b></span>
 					</div>
 				</div>
 
-				<h2 id="movementName">University of Central Florida Cru</h2>
-				<input type="hidden" id="movementId" name="movementId">
-				<input type="hidden" id="userName" name="userName">
-				<input type="hidden" id="userPhone" name="userPhone">
+				<div id="slideable">
+					<h2 id="movementName">University of Central Florida Cru</h2>
+					<input type="hidden" id="movementId" name="movementId">
+					<input type="hidden" id="userName" name="userName">
+					<input type="hidden" id="userPhone" name="userPhone">
 
-			  <div id="statsList">
-			  	<div>
-						<label for="spiritualConvo">Spiritual Conversations</label>
-						<span rel="tooltip" title="How many Spiritual Conversations have you engaged in whether you did or did not present the gospel and bring them to a point of decision. (Each time you engage the same person count it.)">i</span>
-					</div>
-					<div>
-						<span class="dec button">-</span>
-						<input id="spiritualConvo" name="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric" value="0">
-						<span class="inc button">+</span>
-					</div>
-					<div>
-						<label for="personalEvang">Personal Evangelism</label>
-						<span rel="tooltip" title="How many gospel presentations through personal evangelism, where you brought him/her to a point of decision? (Each time you share the gospel with the same person count it) (Includes staff, student, faculty & volunteer evangelism and personal internet evangelism)">i</span>
-					</div>
-					<div>
-						<span class="dec button">-</span>
-						<input id="personalEvang" name="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
-						<span class="inc button">+</span>
-					</div>
-					<div>
-						<label for="personalEvangDec">Personal Evangelism Decisions</label>
-						<span rel="tooltip" title="How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the gospel?">i</span>
-					</div>
-					<div>
-						<span class="dec button">-</span>
-						<input id="personalEvangDec" name="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
-						<span class="inc button">+</span>
-					</div>
-					<div>
-						<label for="holySpiritPres">Holy Spirit Presentations</label>
-						<span rel="tooltip" title="How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?">i</span>
-					</div>
-					<div>
-						<span class="dec button">-</span>
-						<input id="holySpiritPres" name="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
-						<span class="inc button">+</span>
+				  <div id="statsList">
+				  	<div>
+							<label for="spiritualConvo">Spiritual Conversations</label>
+							<span rel="tooltip" title="How many Spiritual Conversations have you engaged in whether you did or did not present the gospel and bring them to a point of decision. (Each time you engage the same person count it.)">i</span>
+						</div>
+						<div>
+							<span class="dec button">-</span>
+							<input id="spiritualConvo" name="spiritualConvo" type="number" min="0" max="100" step="1" inputmode="numeric" value="0">
+							<span class="inc button">+</span>
+						</div>
+						<div>
+							<label for="personalEvang">Personal Evangelism</label>
+							<span rel="tooltip" title="How many gospel presentations through personal evangelism, where you brought him/her to a point of decision? (Each time you share the gospel with the same person count it) (Includes staff, student, faculty & volunteer evangelism and personal internet evangelism)">i</span>
+						</div>
+						<div>
+							<span class="dec button">-</span>
+							<input id="personalEvang" name="personalEvang" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+							<span class="inc button">+</span>
+						</div>
+						<div>
+							<label for="personalEvangDec">Personal Evangelism Decisions</label>
+							<span rel="tooltip" title="How many people have indicated a decision to receive Christ as their Savior and Lord after hearing a personal presentation of the gospel?">i</span>
+						</div>
+						<div>
+							<span class="dec button">-</span>
+							<input id="personalEvangDec" name="personalEvangDec" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+							<span class="inc button">+</span>
+						</div>
+						<div>
+							<label for="holySpiritPres">Holy Spirit Presentations</label>
+							<span rel="tooltip" title="How many people have heard a presentation of the ministry of the Holy Spirit and been given the opportunity to respond?">i</span>
+						</div>
+						<div>
+							<span class="dec button">-</span>
+							<input id="holySpiritPres" name="holySpiritPres" type="number" min="0" max="100" step="1"  inputmode="numeric" value="0">
+							<span class="inc button">+</span>
+						</div>
 					</div>
 				</div>
 				<div>
@@ -339,7 +341,9 @@
           let startDate = new Date(Date.now() - 14*24*60*60*1000).toLocaleString().split(',')[0];
 
           $('#startDate').val(startDate);
+          $('.startDate').text(startDate);
           $('#endDate').val(endDate);
+          $('.endDate').text(endDate);
 
         	// #locations/id_number - look up that id and display it - 2.0 capabilities
 
@@ -479,6 +483,11 @@
 		    	}
 		    }
 		    else {
+		    	$('#slideable').addClass('transition');
+					setTimeout(function(){
+						$('#slideable').removeClass("transition");
+					}, 250);
+		    	//$('#location-form').show( { direction: "right" }, 200);
 		    	window.user.location = user.location + 1;
 			    location.hash = "#locations/"+user.locations[user.location].id;
 		    }
