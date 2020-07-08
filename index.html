@@ -39,11 +39,11 @@
 				<small><b>Associate with my account</b></small>
 				</div>
 				<div class="loginInfo">
-					<small><b>Login with my phone number</b></small>
+					<small><b>If you have previously registered, go ahead and enter your phone number!</b> <br><br> If you haven't yet registered, you'll need open the custom link that was sent to you.</small>
 				</div>
 	  		<input id="regUserPhone" name="regUserPhone" type="tel" required placeholder="Phone Number">
 	  		<div class="movementInfo">
-		  		<input name="register" id="register" type="checkbox" onchange="toggleUserName();">
+		  		<input name="register" id="register" type="checkbox" onchange="toggleRegister();">
 		  		<label for="register">Register as new user</label>
 					<input id="regUserName" name="regUserName" type="text" placeholder="First and Last Name" style="width: 100%; display: none;">
 				</div>
@@ -157,17 +157,19 @@
 		</div>
 
 		<script>
-			//SERVICE WORKER
-			function toggleUserName(){
-				$('#regUserName').toggle(); 
+			function toggleRegister(){
 				if($('#register')[0].checked){
 					$('#regUserName').prop('required',true); 
+					$('#regUserName').show(); 
+					$('#formSubmit span').show();
 				}
 				else{
 					$('#regUserName').removeAttr('required'); 
+					$('#regUserName').hide(); 
+					$('#formSubmit span').hide();
 				}
-				$('#formSubmit span').toggle();
 			}
+			//SERVICE WORKER
 			if ('serviceWorker' in navigator) {
 			  navigator.serviceWorker.register('sw.js', {
 			    scope: './'
@@ -212,30 +214,41 @@
 			  return jqxhr;
 	    }
 
-	    async function registerUser(){
+	    async function registerUser(name, phone, locations){
 	    	startSpin();
 				var jqxhr = await $.ajax({
 			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
 			    method: "GET",
 			    dataType: "json",
-			    data: "registerUser=true&userPhone=8253320550&userName=Jimmy%20Mg&userIds=20,390"
+			    data: "registerUser=true&userPhone="+phone+"&userName="+name+"&movementIds="+locations.map(loc => loc.id)
 			  }).done(function(data){
 			  	console.log(data);
-			    //window.movementsList = data;
 			  });
 			  stopSpin();
 			  return jqxhr;
 	    }
-	    async function requestUser(){
+	    async function updateUser(phone, locations){
 	    	startSpin();
 				var jqxhr = await $.ajax({
 			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
 			    method: "GET",
 			    dataType: "json",
-			    data: "requestUser=true&userPhone=8453320550"
+			    data: "updateUser=true&userPhone="+phone+"&movementIds="+locations.map(loc => loc.id)
 			  }).done(function(data){
 			  	console.log(data);
-			    //window.movementsList = data;
+			  });
+			  stopSpin();
+			  return jqxhr;
+	    }
+	    async function requestUser(userPhone){
+	    	startSpin();
+				var jqxhr = await $.ajax({
+			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
+			    method: "GET",
+			    dataType: "json",
+			    data: "requestUser=true&userPhone="+userPhone
+			  }).done(function(data){
+			  	console.log(data);
 			  });
 			  stopSpin();
 			  return jqxhr;
@@ -275,11 +288,9 @@
         	catch {
         		movements = false; 
         	}
-
+					await loadMovements();
         	//then lets show our movements page
         	if(movements){
-						let movementsList = await loadMovements();
-						
 	        	for(movement of movements) {
 	            $('#movements').append('<input id="n'+movement+'" name="'+movement+'" type="checkbox" ><label for="n'+movement+'" >'+window.movementsList[movement]+'</label>');
 	        	}
@@ -289,8 +300,8 @@
         	//otherwise, lets login or add movements from a dropdown if/when that's added.
         	else {
         		$('.movementInfo').hide();
-	        	$('#regUserName').removeAttr('required');
 	        	$('.loginInfo').show();
+	        	toggleRegister();
         	}
  
         	projector.classList = 'onboarding';
@@ -337,7 +348,7 @@
         }
       }  
       //PROCESS ONBOARDING FORM
-      function processOnboardForm(e) {
+      async function processOnboardForm(e) {
 		    if (e.preventDefault) e.preventDefault();
 
 		    let user = {};
@@ -374,19 +385,41 @@
 
           //we send in and add a new user
 	        if(register){
-
+	        	let result = await registerUser(user.name, user.phone, user.locations);
+	        	if(result.result != "success"){
+	        		alert("I'm sorry that phone number is already registered with a name, if it's yours, try unchecking register, and click Setup Device");
+	        		return
+	        	}
 	        }
           //OR we overwrite the existing.
 	        else {
-
+	        	let result = await updateUser(user.phone, user.locations);
+	        	if(result.result == "success"){
+	        		user.name = result.name;
+	        	}
+	        	else {
+	        		alert("I'm sorry that phone number is not yet registered! Go ahead and check 'Register as new user' and enter your name. \n\n OR if you entered your number wrong, please try again :)")
+	        		return
+	        	}
 	        }
         }
+        //attempt to load information from db
         else {
-          //we load a user's information and movement information.
+        	let result = await requestUser(user.phone);
+        	if(result.result == "success"){
+        		user.name = result.user.userName;
+        		user.locations = result.user.userIds.split(',').map(function(id){
+        			return {name: window.movementsList[id], id: id};
+        		});
+        		user.lastUpdate = Date(result.user.userLastUpdate).toLocaleString();
+        	}
+        	else {
+        		alert("I'm sorry, that phone number is not registered.  Either you entered your number wrong, or you need to register.  To do so  please register using the custom link you were sent.")
+        		return
+        	}
         }
 
         //after all that we set the user and return
-
 		    setUser(user);
 		    window.user = user;
 		    location.hash = "#";
@@ -398,6 +431,7 @@
 
 		    return false;
 			}
+
 			var form = document.getElementById('onboard-form');
 			if (form.attachEvent) {
 			    form.attachEvent("submit", processOnboardForm);
