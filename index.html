@@ -136,15 +136,15 @@
       <div class="cards">
 	      <div class="card left">
 	      	<img src="gospel.png" width="80px" height="80px">
-	      	<p>Your group shared the Gospel with 10 people!</p>
+	      	<p>Your group shared the Gospel with <span id="personalEvangSum"></span> !</p>
 	      </div>
 	      <div class="card right">
 	      	<img src="spirit.png" width="80px" height="80px">
-	      	<p>Your group saw 3 people hear a presentation of the Spirit Filled Life!</p>
+	      	<p>Your group saw <span id="holySpiritPresSum"></span> hear a presentation of the Spirit Filled Life!</p>
 	      </div>
 	      <div class="card center">
 	      	<img src="decision.png" width="80px" height="80px">
-	      	<p>Your group saw 2 people indicate a decision to accept Jesus!</p>
+	      	<p>Your group saw <span id="personalEvangDecSum"></span> indicate a decision to accept Jesus!</p>
 	      </div>
 	    </div>
       
@@ -461,26 +461,27 @@
 				window.formSubs.push(form.serialize());
         disabled.attr('disabled','disabled');
 
-		    //advance the location if not the end one, run hashchange again
+		    //advance the location if we're at the end let's submit!
 		    if(user.locations.length == user.location + 1){
 			    startSpin();
 
 		    	//we're resetting location to 0
 		    	window.user.location = 0;
 		    	//submit everything - can we do this in one go?
-		    	for(movement of window.formSubs){
-		    		var jqxhr = await $.ajax({
-					    url: url,
-					    method: "GET",
-					    dataType: "json",
-					    data: movement
-					  }).done(function(data){
-					    console.log(data);
-					  });
-				    //THen change the location
-			    	location.hash = "#summary";
-			    	stopSpin();
-		    	}
+		    	var jqxhr = await $.ajax({
+				    url: url,
+				    method: "GET",
+				    dataType: "json",
+				    data: window.formSubs.join('&')
+				  }).done(function(data){
+				    console.log(data);
+				  });
+				  $('#personalEvangSum').text(jqxhr.groupNum.personalEvang+(jqxhr.groupNum.personalEvang != 1 ? ' people' : ' person' ));
+				  $('#holySpiritPresSum').text(jqxhr.groupNum.holySpiritPres+(jqxhr.groupNum.holySpiritPres != 1 ? ' people' : ' person' ));
+				  $('#personalEvangDecSum').text(jqxhr.groupNum.personalEvangDec+(jqxhr.groupNum.personalEvangDec != 1 ? ' people' : ' person' ));
+			    //THen change the location
+		    	location.hash = "#summary";
+		    	stopSpin();
 		    }
 		    else {
 		    	$('#slideable').addClass('transition');
