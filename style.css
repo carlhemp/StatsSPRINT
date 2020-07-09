@@ -404,7 +404,7 @@ select {
   display: grid;
   cursor: pointer;
   padding-bottom: calc(50% - .5rem);
-  padding-top: calc(50% - .5rem);
+  padding-top: calc(50% - .4rem);
 }
 /*+/- Buttons*/
 /*TOOLTIP CSS*/

@@ -138,12 +138,12 @@
 						<input id="DOW_0-2" type="radio" name="weekday" value="2"><label for="DOW_0-2">T</label>
 						<input id="DOW_0-3" type="radio" name="weekday" value="3"><label for="DOW_0-3">W</label>
 						<input id="DOW_0-4" type="radio" name="weekday" value="4"><label for="DOW_0-4">T</label>
-						<input id="DOW_0-5" type="radio" name="weekday" value="5"><label for="DOW_0-5">F</label>
+						<input id="DOW_0-5" type="radio" name="weekday" value="5" checked><label for="DOW_0-5">F</label>
 						<input id="DOW_0-6" type="radio" name="weekday" value="6"><label for="DOW_0-6">S</label>
 					</div>
-					<input type="time" id="reminderDate" name="reminderDate"><br><br>
-					<button>&#128197; Set calendar reminder</button>
-					<button>💬 Set text reminder</button>
+					<input type="time" id="reminderDate" name="reminderDate" value="12:00"><br><br>
+					<button onclick="setCalendarReminder();">&#128197; Set calendar reminder</button>
+					<button onclick="setTextReminder();">💬 Set text reminder</button>
 				</div>
 			</div>
 
@@ -467,7 +467,6 @@
 
 		    return false;
 			}
-
 			var form = document.getElementById('onboard-form');
 			if (form.attachEvent) {
 			    form.attachEvent("submit", processOnboardForm);
@@ -533,6 +532,7 @@
 			} else {
 			    form.addEventListener("submit", processLocationForm);
 			}
+
       function startSpin() {
         document.getElementById('spin-container').classList = "spin";
       }
@@ -540,43 +540,25 @@
         document.getElementById('spin-container').classList = "";
       }
 
-      function addLocationtoList() {
-      	let loca = prompt("What's the location's name?");
-      	let movement = document.getElementById('movement');
-      	movement.insertAdjacentHTML('beforeend', '<option value="" selected>'+ loca + '</option>');
+      function setCalendarReminder(){
+      	let details = encodeURI("Time to enter the week's stats!\n\nhttps://carlhemp.github.io/StatsSPRINT/");
+      	//get's the next selected date
+      	var d = new Date();
+				d.setDate(d.getDate() + (parseInt($('input[name="weekday"]:checked').val()) + 7 - d.getDay()) % 7);
+
+      	let date = (new Date(d.getMonth()+1+'/'+d.getDate()+'/'+d.getFullYear()+' '+$('#reminderDate').val())).toISOString().replace(/-|:|\.\d\d\d/g,"");
+      	let title = encodeURI("Time to enter stats");
+
+      	let url = 'https://www.google.com/calendar/render?action=TEMPLATE&text='+
+      	  title+'&dates='+date+'/'+date+
+      	'&details='+details+'&recur=RRULE:FREQ=WEEKLY&location=&sf=true&output=xml'
+      	window.open(url);
+				//window.open('data:text/calendar;charset=utf8,'+escape("BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Our Company//NONSGML v1.0//EN\nBEGIN:VEVENT\nUID:me@google.com\nDTSTAMP:20120315T170000Z\nATTENDEE;CN=My Self ;RSVP=TRUE:MAILTO:me@gmail.com\nORGANIZER;CN=Me:MAILTO::me@gmail.com\nDTSTART:5/5/20\nDTEND:5/5/20\nLOCATION:The woods\nSUMMARY:Our Meeting Office\nEND:VEVENT\nEND:VCALENDAR"))
+      }
+      function setTextReminder(){
+        alert("I've not added this yet, coming soon!");
       }
 
-      function summarize() {
-      	let inputs = document.querySelectorAll('.screen.active .row.active input');
-      	let stats = [];
-      	inputs.forEach(function(input) { 
-      		if(input.type == 'number'){
-      			if(input.value > 0) {
-      				stats.push(input.value + ' ' + input.name);
-      			}
-      			input.value = '';
-      		}
-      		else if(input.type == 'checkbox') {
-      			if(input.checked) {
-      				stats.push('1 ' + input.name);	
-      			}
-      			input.checked = false;
-      		}
-				});
-				let s = ' has';
-				if(stats.length > 1) {
-          s = 's have';
-				}
-				let summary = '<h2>'+stats.join(', ') + ' conversation'+s+' been added to your movement!</h2><br><br><br><h2>3 more days until your team gets a new stats score sheet! Check back then :)</h2>';
-				document.getElementById('summaryText').innerHTML = summary;
-      	location.hash = 'submit';
-      	document.querySelectorAll('.active').forEach(function(active) {
-      		active.classList.remove('active');
-      	});
-
-	      document.getElementById("movement").disabled = true;
-	      document.getElementById("summary").scrollTop = 0;
-      }
       //add +/- buttons to input[type="number"]
       $(".button").on("click", function() {
 			  let $button = $(this);
