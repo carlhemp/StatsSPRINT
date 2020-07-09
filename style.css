@@ -53,6 +53,16 @@ select {
   border: 2px solid var(--medium-gray);
   border-radius: 2px;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
 .transition {
 	transform: translate3d(120%,0,0);
 }
