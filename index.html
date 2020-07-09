@@ -242,8 +242,8 @@
 			  stopSpin();
 			  return jqxhr;
 	    }
-	    async function requestUser(userPhone){
-	    	startSpin();
+	    async function requestUser(userPhone, spin=true){
+	    	if(spin) {startSpin();}
 				var jqxhr = await $.ajax({
 			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
 			    method: "GET",
@@ -251,8 +251,14 @@
 			    data: "requestUser=true&userPhone="+userPhone
 			  }).done(function(data){
 			  	console.log(data);
+			  	let user = getUser();
+      		user.lastUpdate = data.user.userLastUpdate;
+      		setUser(user);
+      		window.user = user;
+      		$('#startDate').val(user.lastUpdate);
+      		$('.startDate').text(user.lastUpdate);
 			  });
-			  stopSpin();
+			  if(spin) {stopSpin();}
 			  return jqxhr;
 	    }
 
@@ -320,6 +326,7 @@
         	let user = window.user;
         	if(user.location == 0) {
         		window.formSubs = [];
+        		requestUser(user.phone, false);
         	}
 
         	if(user.locations.length == user.location + 1){
@@ -338,7 +345,7 @@
 
           // set dates for the movement
           let endDate = new Date().toLocaleString().split(',')[0];
-          let startDate = new Date(Date.now() - 14*24*60*60*1000).toLocaleString().split(',')[0];
+          let startDate = user.lastUpdate;
 
           $('#startDate').val(startDate);
           $('.startDate').text(startDate);
@@ -395,6 +402,7 @@
           //we send in and add a new user
 	        if(register){
 	        	let result = await registerUser(user.name, user.phone, user.locations);
+	        	user.lastUpdate = result.user.userLastUpdate;
 	        	if(result.result != "success"){
 	        		alert("I'm sorry that phone number is already registered with a name, if it's yours, try unchecking register, and click Setup Device");
 	        		return
@@ -404,12 +412,14 @@
 	        else {
 	        	let result = await updateUser(user.phone, user.locations);
 	        	if(result.result == "success"){
-	        		user.name = result.name;
+	        		user.name = result.user.userName;
+	        		user.lastUpdate = result.user.userLastUpdate;
 	        	}
 	        	else {
 	        		alert("I'm sorry that phone number is not yet registered! Go ahead and check 'Register as new user' and enter your name. \n\n OR if you entered your number wrong, please try again :)")
 	        		return
 	        	}
+	        	
 	        }
         }
         //attempt to load information from db
@@ -421,7 +431,7 @@
         		user.locations = result.user.userIds.split(',').map(function(id){
         			return {name: window.movementsList[id], id: id};
         		});
-        		user.lastUpdate = Date(result.user.userLastUpdate).toLocaleString();
+        		user.lastUpdate = result.user.userLastUpdate;
         	}
         	else {
         		alert("I'm sorry, that phone number is not registered.  Either you entered your number wrong, or you need to register.  To do so  please register using the custom link you were sent.")
