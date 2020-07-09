@@ -127,8 +127,24 @@
 		<div id="summary" class="screen last-el-bottom">
 			<h1></h1>
 
-			<div>
-				<button href="#"><span>&#128197;</span> Set a calendar reminder</button>
+			<div id="reminder">
+				<div onclick="$('#hiddenReminder').hide(); $('#blurBackground').hide();" id="blurBackground"></div>
+				<button onclick="$('#hiddenReminder').toggle(); $('#blurBackground').toggle();"><span>&#128197; 💬</span> Set a reminder</button>
+				<div id="hiddenReminder">
+					<p>What day/time?</p>
+					<div class="day-of-week">
+						<input id="DOW_0-0" type="radio" name="weekday" value="0"><label for="DOW_0-0">S</label>
+						<input id="DOW_0-1" type="radio" name="weekday" value="1"><label for="DOW_0-1">M</label>
+						<input id="DOW_0-2" type="radio" name="weekday" value="2"><label for="DOW_0-2">T</label>
+						<input id="DOW_0-3" type="radio" name="weekday" value="3"><label for="DOW_0-3">W</label>
+						<input id="DOW_0-4" type="radio" name="weekday" value="4"><label for="DOW_0-4">T</label>
+						<input id="DOW_0-5" type="radio" name="weekday" value="5"><label for="DOW_0-5">F</label>
+						<input id="DOW_0-6" type="radio" name="weekday" value="6"><label for="DOW_0-6">S</label>
+					</div>
+					<input type="time" id="reminderDate" name="reminderDate"><br><br>
+					<button>&#128197; Set calendar reminder</button>
+					<button>💬 Set text reminder</button>
+				</div>
 			</div>
 
 			<p style="text-align: center;">Thanks for celebrating with us all that God is doing on Campus! Below is just a small snapshot of what God is doing on your campus in the last 3 weeks.</p>

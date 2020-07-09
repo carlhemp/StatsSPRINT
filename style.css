@@ -340,6 +340,72 @@ select {
 #movement {
 	margin: 0;
 }
+#reminder {
+	position: relative;
+}
+#reminder > button {
+	position:relative;
+	z-index: 10;
+}
+#hiddenReminder {
+	position: absolute;
+	display: none;
+	top: 2rem;
+	background-color: white;
+	filter: drop-shadow(0 0.1rem 0.25rem var(--medium-gray));
+	z-index: 10;
+	padding: 1rem;
+	border-radius: 4px;
+	width: calc(100% + 2rem);
+	left: -1rem;
+}
+#hiddenReminder button {
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+}
+#hiddenReminder > * {
+	margin-bottom: 1rem;
+	width: 100%;
+}
+#blurBackground {
+	position: fixed;
+	display:none;
+  z-index: 9;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  backdrop-filter: blur(3px);
+  background-color: rgba(255, 255, 255, 0.1);
+  height: 100vh;
+  width: 100vw;
+}
+.day-of-week {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+	grid-gap: 5%;
+}
+.day-of-week input {
+    display: none;
+}
+.day-of-week input:checked+label {
+  color: #fff;
+  background: #000;
+  border: 1px solid green;
+}
+.day-of-week input+label {
+  color: #000;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 3px;
+  text-align: center;
+  display: grid;
+  cursor: pointer;
+  padding-bottom: calc(50% - .5rem);
+  padding-top: calc(50% - .5rem);
+}
 /*+/- Buttons*/
 /*TOOLTIP CSS*/
 #statsList span,
