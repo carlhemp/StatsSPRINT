@@ -567,7 +567,7 @@
 			    data: "updateUser=true&userPhone="+window.user.phone+"&txtReminderTime="+encodeURI(time+' '+Intl.DateTimeFormat().resolvedOptions().timeZone)
 			  }).done(function(data){
 			  	console.log(data);
-			  	alert('Text Reminders are set for: '+time+ '\n\nRespond to a text with "STOP" to stop at anytime');
+			  	alert('Text Reminders are set for: '+time+ '\n\nRespond to a text with "STOP" to stop at any time');
 			  	$('#blurBackground').click();
 			  });
 			  stopSpin();
