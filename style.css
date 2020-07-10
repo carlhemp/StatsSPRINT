@@ -320,6 +320,11 @@ input:checked + .round {
 h2 {
 	color: var(--cru-yellow);
 }
+h4 {
+	color: var(--medium-gray);
+	font-weight: normal;
+	text-align: end;
+}
 button {
 	height: 2rem;
 }
