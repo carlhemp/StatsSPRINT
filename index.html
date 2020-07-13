@@ -506,6 +506,8 @@
 				  $('#personalEvangSum').text(jqxhr.groupNum.personalEvang+(jqxhr.groupNum.personalEvang != 1 ? ' people' : ' person' ));
 				  $('#holySpiritPresSum').text(jqxhr.groupNum.holySpiritPres+(jqxhr.groupNum.holySpiritPres != 1 ? ' people' : ' person' ));
 				  $('#personalEvangDecSum').text(jqxhr.groupNum.personalEvangDec+(jqxhr.groupNum.personalEvangDec != 1 ? ' people' : ' person' ));
+				  window.user.lastUpdate = new Date().toLocaleString().split(',')[0];
+				  setUser(window.user);
 			    //THen change the location
 		    	location.hash = "#summary";
 		    	stopSpin();
