@@ -158,7 +158,7 @@ input[type=number] {
 	margin-top: 1rem;
 }
 .card {
-	width: 40vw;
+	width: min(40vw, 450px * 0.4);
 	height: max(30vh, 200px);
 	filter: drop-shadow(0 0.1rem 0.25rem var(--medium-gray));
 	background-color: white;
@@ -191,6 +191,7 @@ input[type=number] {
   margin-right: auto;
   display: block;
   width: 65%;
+  margin-top: 2rem;
 	margin-bottom: 2rem;
 }
 
@@ -470,3 +471,10 @@ span[rel="tooltip"] {
   left: auto;
   margin: 0;
 }
+@media only screen and (min-device-width: 500px){
+	.screen {
+	  padding-left: calc((100vw - 450px)/2);
+	  padding-right: calc((100vw - 450px)/2);	
+	}
+}
+
