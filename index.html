@@ -144,7 +144,7 @@
 						<input id="DOW_0-6" type="radio" name="weekday" value="6"><label for="DOW_0-6">S</label>
 					</div>
 					<input type="time" id="reminderTime" name="reminderTime" value="12:00"><br><br>
-					<button onclick="setCalendarReminder();">&#128197; Set calendar reminder</button>
+					<button onclick="setCalendarReminder();">&#128197; Set Google Calendar reminder</button>
 					<button onclick="setTextReminder();">💬 Set text reminder</button>
 				</div>
 			</div>
@@ -597,7 +597,25 @@
 			      newVal = 0;
 			    }
 			  }
-			  $button.parent().find("input").val(newVal);
+			  $button.parent().find("input").val(newVal).trigger("change");
+			});
+			$('#statsList input').on("change", function() {
+				//select all previous inputs and toggle on a notice/toolip if less than except for HS
+				let SC = parseInt($('#spiritualConvo').val());
+				let PE = parseInt($('#personalEvang').val());
+				let PED = parseInt($('#personalEvangDec').val());
+				if((SC < PE) || (SC < PED)){
+					$('#spiritualConvo').parent().addClass('tooLow');
+				} 
+				else {
+					$('#spiritualConvo').parent().removeClass('tooLow');
+				}
+				if(PE < PED){
+					$('#personalEvang').parent().addClass('tooLow');
+				} 
+				else {
+					$('#personalEvang').parent().removeClass('tooLow');
+				}
 			});
 
       //TOOLTIP CODE

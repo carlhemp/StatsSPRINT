@@ -63,6 +63,9 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
+p {
+	line-height: 1.5;
+}
 .transition {
 	transform: translate3d(120%,0,0);
 }
@@ -271,6 +274,12 @@ input:checked + .round {
 }
 .clicky {
 	cursor: pointer;
+}
+.tooLow:after {
+	content: 'should be higher than following #s';
+	font-size: small;
+	color: red;
+	font-style: italic;
 }
 .row {
 	display: flex;
