@@ -304,7 +304,7 @@
         else if(hash.startsWith('#onboarding')){
         	if(window.user){
         		$('#notification').remove();
-        		$('#locations').prepend('<div id="notification">You visited an onboarding link! Click <a onclick="delete window.user; localStorage.removeItem(\'user\'); $(\'#notification\').remove();" href="'+hash+'">here</a> to set up!</div>');
+        		$('#locations').prepend('<div id="notification">You visited an onboarding link. Click <a onclick="delete window.user; localStorage.removeItem(\'user\'); $(\'#notification\').remove();" href="'+hash+'">here</a> to set up!</div>');
         		location.hash = "#locations";
         		return
         	}
