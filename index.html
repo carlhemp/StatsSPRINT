@@ -262,6 +262,7 @@
 	    }
 	    async function requestUser(userPhone, spin=true){
 	    	if(spin) {startSpin();}
+	    	await loadMovements(); //needed for matching new locations as they're downloaded.
 				var jqxhr = await $.ajax({
 			    url: "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec",
 			    method: "GET",
@@ -271,6 +272,9 @@
 			  	console.log(data);
 			  	let user = getUser();
       		user.lastUpdate = data.user.userLastUpdate;
+      		user.locations = data.user.userIds.split(',').map(function(id){
+        			return {name: window.movementsList[id], id: id};
+        		});
       		setUser(user);
       		window.user = user;
       		$('#startDate').val(user.lastUpdate);
@@ -287,8 +291,8 @@
 				//Make sure we've got a user.
 				let local_user = getUser();
 				if(local_user){
-					if(!window.user){
-						window.user = local_user;
+					if(!window.user){ //first time opening the website - let's check for changes to the user.
+						await requestUser(local_user.phone);
 					}
 				}
 				else if(!hash.startsWith('#onboarding')){
