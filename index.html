@@ -610,7 +610,8 @@
 				let SC = parseInt($('#spiritualConvo').val());
 				let PE = parseInt($('#personalEvang').val());
 				let PED = parseInt($('#personalEvangDec').val());
-				if((SC < PE) || (SC < PED)){
+				let HS = parseInt($('#holySpiritPres').val());
+				if((SC < PE) || (SC < PED) || SC < HS){
 					$('#spiritualConvo').parent().addClass('tooLow');
 				} 
 				else {
