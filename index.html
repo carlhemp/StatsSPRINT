@@ -52,7 +52,9 @@
 					<label for="ua" >I agree to the <a href="https://www.cru.org/us/en/about/terms-of-use.html" target="_blank">Cru User Agreement</a></label>
 				</div>
 				<div>
-					<button id="formSubmit" class="bottom-button"><span style="display:none">Register and </span>Setup Device</button>
+	      	<span class="bottom-button">
+						<button id="formSubmit"><span style="display:none">Register and </span>Setup Device</button>
+					</span>
 					<span class="questions">
 						Questions or Bugs? Email 
 						<a href="mailto: carl.hempel@cru.org">carl.hempel@cru.org</a>
@@ -125,7 +127,11 @@
 					</div>
 				</div>
 				<div>
-					<button id="movementSubmit" class="bottom-button">Next</button>
+					<span class="bottom-button">
+						<button type="button" id="movementSkip" onclick="goToNextMovement();" class="white">Skip</button>
+						<button type="button" id="movementNext" style="width: 40%;" onclick="processLocationForm();">Save & Next</button>
+						<button type="button" id="movementSubmit" onclick="submitLocationForm();" class="white">Submit</button>
+					</span>
 					<span class="questions">
 						Questions or Bugs? Email 
 						<a href="mailto: carl.hempel@cru.org">carl.hempel@cru.org</a>
@@ -175,7 +181,9 @@
 	    </div>
       
       <div>
-				<button class="bottom-button" onclick="location.hash='';">Enter More</button>
+      	<span class="bottom-button">
+					<button onclick="location.hash='';">Enter More</button>
+				</span>
 				<span class="questions">
 					Questions or Bugs? Email 
 					<a href="mailto: carl.hempel@cru.org">carl.hempel@cru.org</a>
@@ -365,15 +373,24 @@
         	}
 
         	if(user.locations.length == user.location + 1){
-        		$('#movementSubmit').text('Submit');
+        		$('#movementNext').addClass('hideLeft');
+        		$('#movementSkip').text('Reset');
+        		$('#movementSubmit').text('Submit').removeClass('white');
         	}
         	else{
-        		$('#movementSubmit').text('Next');
+        		$('#movementNext').removeClass('hideLeft');
+        		$('#movementSkip').text('Skip');
+        		$('#movementSubmit').text('Submit').addClass('white');
         	}
 
         	var movement = user.locations[user.location];
           $('.put_name').text(user.name); 
-          $('#movementName').text(movement.name);
+
+          let prefix = '';
+          if(user.locations.length > 1){
+          	prefix = (user.location + 1)+"/"+user.locations.length+" ";
+          }
+          $('#movementName').text(prefix + movement.name);
           $('#movementId').val(movement.id); //hidden field
           $('#userName').val(user.name); //hidden field
           $('#userPhone').val(user.phone); //hidden field
@@ -494,49 +511,19 @@
 			}
 
       //PROCESS LOCATION FORM
-      async function processLocationForm(e) {
-		    if (e.preventDefault) e.preventDefault();
+      function processLocationForm(submit) {
         let user = window.user;
 		    //save the data from the form for submittal later
-		    var form = $('#location-form'),
-            url  =  "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec"
+		    var form = $('#location-form');
 
 				var disabled = form.find(':input:disabled').removeAttr('disabled');
 				window.formSubs.push(form.serialize());
         disabled.attr('disabled','disabled');
 
 		    //advance the location if we're at the end let's submit!
-		    if(user.locations.length == user.location + 1){
-			    startSpin();
-
-		    	//we're resetting location to 0
-		    	window.user.location = 0;
-		    	//submit everything - can we do this in one go?
-		    	var jqxhr = await $.ajax({
-				    url: url,
-				    method: "GET",
-				    dataType: "json",
-				    data: window.formSubs.join('&')
-				  }).done(function(data){
-				    console.log(data);
-				  });
-				  $('#personalEvangSum').text(jqxhr.groupNum.personalEvang+(jqxhr.groupNum.personalEvang != 1 ? ' people' : ' person' ));
-				  $('#holySpiritPresSum').text(jqxhr.groupNum.holySpiritPres+(jqxhr.groupNum.holySpiritPres != 1 ? ' people' : ' person' ));
-				  $('#personalEvangDecSum').text(jqxhr.groupNum.personalEvangDec+(jqxhr.groupNum.personalEvangDec != 1 ? ' people' : ' person' ));
-				  window.user.lastUpdate = new Date().toLocaleString().split(',')[0];
-				  setUser(window.user);
-			    //THen change the location
-		    	location.hash = "#summary";
-		    	stopSpin();
-		    }
-		    else {
-		    	$('#slideable').addClass('transition');
-					setTimeout(function(){
-						$('#slideable').removeClass("transition");
-					}, 250);
-		    	//$('#location-form').show( { direction: "right" }, 200);
-		    	window.user.location = user.location + 1;
-			    location.hash = "#locations/"+user.locations[user.location].id;
+		    console.log(!submit, user.locations.length != user.location + 1)
+		    if(!submit && user.locations.length != user.location + 1){
+		      goToNextMovement();
 		    }
         
         //clear form
@@ -547,11 +534,50 @@
 		    $('#notification').remove();
 
 			}
-			var form = document.getElementById('location-form');
-			if (form.attachEvent) {
-			    form.attachEvent("submit", processLocationForm);
-			} else {
-			    form.addEventListener("submit", processLocationForm);
+      
+      //SUBMIT LOCATION FORM AFTER PROCESSING CURRENT PAGE
+			async function submitLocationForm(){
+				processLocationForm(true);
+
+		    startSpin();
+        var url  =  "https://script.google.com/a/cru.org/macros/s/AKfycbyLKAjuQwwDy2j2s_rfg2NiRrOO-jUyJbVKxuGi/exec";
+        
+	    	//we're resetting location to 0
+	    	window.user.location = 0;
+	    	//submit everything - we can do this in one go.
+	    	var jqxhr = await $.ajax({
+			    url: url,
+			    method: "GET",
+			    dataType: "json",
+			    data: window.formSubs.join('&')
+			  }).done(function(data){
+			    console.log(data);
+			  });
+			  $('#personalEvangSum').text(jqxhr.groupNum.personalEvang+(jqxhr.groupNum.personalEvang != 1 ? ' people' : ' person' ));
+			  $('#holySpiritPresSum').text(jqxhr.groupNum.holySpiritPres+(jqxhr.groupNum.holySpiritPres != 1 ? ' people' : ' person' ));
+			  $('#personalEvangDecSum').text(jqxhr.groupNum.personalEvangDec+(jqxhr.groupNum.personalEvangDec != 1 ? ' people' : ' person' ));
+			  window.user.lastUpdate = new Date().toLocaleString().split(',')[0];
+			  setUser(window.user);
+		    //THen change the location
+	    	location.hash = "#summary";
+	    	stopSpin();
+			}
+
+			function goToNextMovement() {
+		    $('input[type="number"]').val(0);
+
+	    	$('#slideable').addClass('transition');
+				setTimeout(function(){
+					$('#slideable').removeClass("transition");
+				}, 250);
+	    	//$('#location-form').show( { direction: "right" }, 200);
+	    	if(window.user.locations.length == user.location + 1){
+          window.user.location = 0;
+	    	}
+	    	else{
+		    	window.user.location = user.location + 1;
+	    	}
+		    location.hash = "#locations/"+user.locations[user.location].id;
 			}
 
       function startSpin() {
